@@ -1,0 +1,1 @@
+widget_genericos como pdfview.dart

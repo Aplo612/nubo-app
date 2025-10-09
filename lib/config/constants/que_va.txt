@@ -1,0 +1,2 @@
+cosntants: data_dummy
+enviroments: direccion estatica de imagenes locales y paleta de colores

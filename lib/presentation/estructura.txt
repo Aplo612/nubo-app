@@ -1,0 +1,9 @@
+cada folder debe tener un archivo principal
+views
+|_views.dart
+|_pdfview
+	|_pdfview_dart
+	
+	
+en el views.dart iria algo como
+export 'package:nubo_app/presentarion/views/_pdfview/_pdfview.dart';

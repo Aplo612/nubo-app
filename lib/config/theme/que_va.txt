@@ -1,0 +1,3 @@
+esquemas de colores
+configuracion de fonts
+estilos de titutlos

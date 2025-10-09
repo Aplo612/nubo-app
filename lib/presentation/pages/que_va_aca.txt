@@ -1,0 +1,7 @@
+Aqui va el esqueleto de todas las vistas y sus widgets children
+
+ejemplo_
+home
+|_home.dart
+|_widgets
+	|_profile_widget.dart
