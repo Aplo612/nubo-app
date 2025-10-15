@@ -1,74 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:nubo/config/config.dart';
+import 'package:flutter/services.dart';
 
-class PasswordField extends StatefulWidget {
-  final String label;
-  final String hintText;
-  final String? Function(String?)? validator;
+class UserField extends StatelessWidget {
+  const UserField({super.key,
+  this.labeltext,
+  this.hinttext,
+  this.icon,
+  this.text,
+  this.listinput,
+  this.validador});
 
-  const PasswordField({
-    super.key,
-    this.label = 'Contraseña',
-    required this.hintText,
-    this.validator,
-  });
-
-  @override
-  State<PasswordField> createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  final _focusNode = FocusNode();
-  bool _obscured = true;
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _toggleObscured() {
-    setState(() => _obscured = !_obscured);
-    // Mantener el foco en el campo
-    if (!_focusNode.hasPrimaryFocus) {
-      _focusNode.requestFocus();
-    }
-  }
+  final String? labeltext;
+  final String? hinttext;
+  final IconData? icon;
+  final TextInputType? text;
+  final List<TextInputFormatter>? listinput;
+  final String? Function(String?)? validador;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    final textFieldFocusNode = FocusNode();
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.label,
-          style: theme.textTheme.titleSmall?.copyWith(
-            color: theme.textTheme.bodySmall?.color?.withValues(),
-          ),
+          labeltext ?? '',
+          style: textTheme.displayMedium?.copyWith(color: gray400),     
         ),
         const SizedBox(height: 6),
         TextFormField(
-          focusNode: _focusNode,
-          keyboardType: TextInputType.visiblePassword,
-          textInputAction: TextInputAction.done,
-          obscureText: _obscured,
-          enableSuggestions: false,
-          autocorrect: false,
-          autofillHints: const [AutofillHints.password],
-          decoration: InputDecoration(
-            // Deja que el tema controle el estilo; solo define lo necesario.
-            hintText: widget.hintText,
-            prefixIcon: const Icon(Icons.lock_outline_rounded),
-            suffixIcon: IconButton(
-              onPressed: _toggleObscured,
-              tooltip: _obscured ? 'Mostrar contraseña' : 'Ocultar contraseña',
-              icon: Icon(
-                _obscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-              ),
+          keyboardType: text,
+          inputFormatters: listinput,
+          focusNode: textFieldFocusNode,
+          style: textTheme.headlineMedium,
+          decoration:  InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never, //Hides label on focus or if filledr
+            hintText: hinttext ,
+            hintStyle: textTheme.displayMedium?.copyWith(color: gray400), 
+            filled: true, // Needed for adding a fill color
+            fillColor: Colors.white, 
+            isDense: true,  // Reduces height a bit
+            prefixIcon: Icon(icon, size: 24, color: gray400),
+            suffixIcon: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
             ),
           ),
-          validator: widget.validator,
+            validator: validador,
         ),
       ],
     );
