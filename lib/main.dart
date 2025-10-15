@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
-            PasswordField(label: "Adrian", hintText: "Soy bueno",),
+            PasswordField(label: "Adrian", hintText: "Soy buenor",),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
