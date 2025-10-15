@@ -95,7 +95,7 @@ class _ButtonCustomState extends State<ButtonCustom> {
     // Si solo hay un hijo, evita Row para mantener centro correcto
     final Widget inner =
         content.length == 1 ? content.first : Row(mainAxisSize: MainAxisSize.min, children: content);
-
+  
     return InkWell(
       onTap: widget.onPressed,
       onHover: (value) => setState(() => _isHovered = value),

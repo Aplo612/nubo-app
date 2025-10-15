@@ -4,7 +4,8 @@ import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginButtons extends StatelessWidget {
-  const LoginButtons({super.key});
+  final VoidCallback onLoginPressed;
+  const LoginButtons({super.key, required this.onLoginPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class LoginButtons extends StatelessWidget {
         ButtonCustom(
           text: "Ingresar",
           onPressed: () {
-            // TODO: acción de login
+            onLoginPressed;
           },
           width: double.infinity,
           textStyle: const TextStyle(
@@ -33,11 +34,11 @@ class LoginButtons extends StatelessWidget {
           color: Colors.white,
           colorHover: Colors.grey.shade200,
           hasBorder: true,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black,
               blurRadius: 8,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -60,11 +61,11 @@ class LoginButtons extends StatelessWidget {
           color: Colors.white,
           colorHover: Colors.grey.shade200,
           hasBorder: true,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black,
               blurRadius: 8,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -90,11 +91,11 @@ class LoginButtons extends StatelessWidget {
                 color: Colors.white,
                 colorHover: Colors.grey.shade200,
                 hasBorder: true,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black,
                     blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),
@@ -113,11 +114,11 @@ class LoginButtons extends StatelessWidget {
                 colorText: Colors.black,
                 fontsizeText: 18,
                 hasBorder: true,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black,
                     blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),

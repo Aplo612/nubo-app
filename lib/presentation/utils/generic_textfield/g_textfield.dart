@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 class UserField extends StatelessWidget {
   const UserField({super.key,
   this.labeltext,
-  this.hinttext,
+  this.hintText,
   this.icon,
   this.text,
   this.listinput,
   this.validador});
 
   final String? labeltext;
-  final String? hinttext;
+  final String? hintText;
   final IconData? icon;
   final TextInputType? text;
   final List<TextInputFormatter>? listinput;
@@ -37,11 +37,11 @@ class UserField extends StatelessWidget {
           style: textTheme.headlineMedium,
           decoration:  InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.never, //Hides label on focus or if filledr
-            hintText: hinttext ,
+            hintText: hintText ,
             hintStyle: textTheme.displayMedium?.copyWith(color: gray400), 
             filled: true, // Needed for adding a fill color
             fillColor: Colors.white, 
-            isDense: true,  // Reduces height a bit
+            isDense: false,  // Reduces height a bit
             prefixIcon: Icon(icon, size: 24, color: gray400),
             suffixIcon: const Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
