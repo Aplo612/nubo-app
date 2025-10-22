@@ -14,6 +14,11 @@ final appRouter = GoRouter(
       path: '/login-form',
       name: LoginFormPage.name,
       builder: (context, state) => const LoginFormPage(),
+    ),
+     GoRoute(
+      path: '/register-form',
+      name: RegisterFormPage.name,
+      builder: (context, state) => const RegisterFormPage(),
     )
   ],
 );

@@ -44,9 +44,8 @@ class LoginButtons extends StatelessWidget {
         // Botón Registrarse
          ButtonCustom(
           text: "Registrarse",
-          onPressed: () {
-            // TODO: acción de login
-          },
+          onPressed: () {context.pushNamed("register_form_page");},
+            // TODO: acción de login       
           width: double.infinity,
           colorText: Colors.grey.shade700,
           textStyle: const TextStyle(

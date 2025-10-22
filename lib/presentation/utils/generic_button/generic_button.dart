@@ -1,42 +1,69 @@
 import 'package:flutter/material.dart';
 
+/// Controlador externo para manipular el botón desde fuera.
+class ButtonController extends ChangeNotifier {
+  bool _enabled = true;
+  String? _text;
+
+  bool get enabled => _enabled;
+  String? get text => _text;
+
+  /// Cambia el texto del botón y notifica
+  void changeText(String newText) {
+    _text = newText;
+    notifyListeners();
+  }
+
+  /// Habilita o deshabilita el botón
+  void setEnabled(bool value) {
+    _enabled = value;
+    notifyListeners();
+  }
+
+  /// Ejecuta manualmente la acción del botón (si está habilitado)
+  VoidCallback? _externalOnPressed;
+  void attach(VoidCallback? onPressed) => _externalOnPressed = onPressed;
+  void press() {
+    if (_enabled && _externalOnPressed != null) {
+      _externalOnPressed!.call();
+    }
+  }
+}
+
 class ButtonCustom extends StatefulWidget {
-  /// Texto opcional. Si no usas texto, pasa null y usa [icon].
   final String? text;
+  final VoidCallback? onPressed;
+  final bool enabled;
+  final ButtonController? controller;
 
-  /// Callback de tap.
-  final VoidCallback onPressed;
-
-  /// Opcional: Icono a mostrar (si lo pasas sin texto, el botón será solo icono).
   final IconData? icon;
-
-  /// Estilo del texto (sobrescribe color/size antiguos si lo pasas).
   final TextStyle? textStyle;
-
-  /// Tamaño del icono (si [icon] != null).
   final double? iconSize;
-
-  /// Color del icono (si [icon] != null).
   final Color? iconColor;
-
-  /// Espacio entre icono y texto cuando ambos se usan.
   final double gap;
-
   final double? width;
   final double? height;
   final double padding;
   final Color color;
   final Color colorHover;
-  final Color? colorText;      // compat: si no pasas textStyle, se usa este
-  final double? fontsizeText;  // compat: si no pasas textStyle, se usa este
+  final Color? colorText;
+  final double? fontsizeText;
   final bool hasBorder;
   final Color? colorBorder;
   final List<BoxShadow>? boxShadow;
+  final Color? disabledColor;
+  final Color? disabledTextColor;
+  final Color? disabledBorderColor;
 
   const ButtonCustom({
     super.key,
-    required this.onPressed,
+    required this.padding,
+    required this.color,
+    required this.colorHover,
     this.text,
+    this.onPressed,
+    this.enabled = true,
+    this.controller,
     this.icon,
     this.textStyle,
     this.iconSize,
@@ -44,18 +71,16 @@ class ButtonCustom extends StatefulWidget {
     this.gap = 8.0,
     this.width,
     this.height,
-    required this.padding,
-    required this.color,
-    required this.colorHover,
     this.colorText,
     this.fontsizeText,
     this.colorBorder,
     this.boxShadow,
     this.hasBorder = false,
-  }) : assert(
-          text != null || icon != null,
-          'Debes proveer al menos texto o icono.',
-        );
+    this.disabledColor,
+    this.disabledTextColor,
+    this.disabledBorderColor,
+  }) : assert(text != null || icon != null,
+            'Debes proveer al menos texto o icono.');
 
   @override
   State<ButtonCustom> createState() => _ButtonCustomState();
@@ -63,21 +88,58 @@ class ButtonCustom extends StatefulWidget {
 
 class _ButtonCustomState extends State<ButtonCustom> {
   bool _isHovered = false;
+  String? _displayText;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayText = widget.text;
+
+    // Si tiene controller, lo conectamos
+    widget.controller?.attach(widget.onPressed);
+    widget.controller?.addListener(() {
+      setState(() {
+        _displayText =
+            widget.controller!.text ?? widget.text; // usa el nuevo texto si hay
+      });
+    });
+  }
+
+  bool get _isDisabled => !widget.enabled;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    // Estilo de texto final (respeta textStyle si viene; si no, usa tus props previas)
+    // Colores efectivos según estado
+    final Color effectiveBase = _isDisabled
+        ? (widget.disabledColor ?? Colors.grey.shade400)
+        : widget.color;
+
+    final Color effectiveHover = _isDisabled
+        ? (widget.disabledColor ?? Colors.grey.shade400)
+        : widget.colorHover;
+
+    final Color effectiveTextColor = _isDisabled
+        ? (widget.disabledTextColor ?? Colors.grey.shade200)
+        : (widget.colorText ?? Colors.white);
+
+    final Color? effectiveBorderColor = widget.hasBorder
+        ? (_isDisabled
+            ? (widget.disabledBorderColor ?? Colors.grey.shade300)
+            : (widget.colorBorder ?? Colors.transparent))
+        : null;
+
+    // Estilo de texto
     final TextStyle effectiveTextStyle = widget.textStyle ??
         (textTheme.displayMedium ?? const TextStyle()).copyWith(
-          color: widget.colorText,
-          fontSize: widget.fontsizeText,
+          color: effectiveTextColor,
+          fontSize: widget.fontsizeText ?? 16,
+          fontWeight: FontWeight.w600,
         );
 
-    // Contenido central dinámico (icono, texto o ambos)
+    // Contenido
     final List<Widget> content = [];
-
     if (widget.icon != null) {
       content.add(Icon(
         widget.icon,
@@ -85,56 +147,42 @@ class _ButtonCustomState extends State<ButtonCustom> {
         color: widget.iconColor ?? effectiveTextStyle.color ?? Colors.black,
       ));
     }
-
-    final hasText = (widget.text != null && widget.text!.isNotEmpty);
-    if (hasText) {
+    if (_displayText != null && _displayText!.isNotEmpty) {
       if (widget.icon != null) content.add(SizedBox(width: widget.gap));
-      content.add(Text(widget.text!, style: effectiveTextStyle));
+      content.add(Text(_displayText!, style: effectiveTextStyle));
     }
+    final Widget inner = content.length == 1
+        ? content.first
+        : Row(mainAxisSize: MainAxisSize.min, children: content);
 
-    // Si solo hay un hijo, evita Row para mantener centro correcto
-    final Widget inner =
-        content.length == 1 ? content.first : Row(mainAxisSize: MainAxisSize.min, children: content);
-  
-    return InkWell(
-      onTap: widget.onPressed,
-      onHover: (value) => setState(() => _isHovered = value),
-      borderRadius: BorderRadius.circular(4),
-      // Ripple notorio
-      splashFactory: InkRipple.splashFactory,
-      radius: 400,
-      overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
-        if (states.contains(WidgetState.pressed)) {
-          return widget.colorHover.withValues(alpha: 0.85);
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return widget.colorHover.withValues(alpha: 0.20);
-        }
-        if (states.contains(WidgetState.focused)) {
-          return widget.colorHover.withValues(alpha: 0.80);
-        }
-        return null;
-      }),
-      highlightColor: widget.colorHover.withValues(alpha: 0.85),
-      splashColor: widget.colorHover.withValues(alpha: 0.80),
-
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: _isHovered ? widget.colorHover : widget.color,
-          border: widget.hasBorder
-              ? Border.all(
-                  color: widget.colorBorder ?? Colors.grey.shade300,
-                  width: 1.5,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                )
-              : null,
-          boxShadow: widget.boxShadow,
+    return MouseRegion(
+      onEnter: (_) {
+        if (!_isDisabled) setState(() => _isHovered = true);
+      },
+      onExit: (_) {
+        if (!_isDisabled) setState(() => _isHovered = false);
+      },
+      child: InkWell(
+        onTap: _isDisabled ? null : widget.onPressed, 
+        borderRadius: BorderRadius.circular(8),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: _isHovered ? effectiveHover : effectiveBase,
+            border: widget.hasBorder && effectiveBorderColor != null
+                ? Border.all(
+                    color: effectiveBorderColor,
+                    width: 1.5,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                  )
+                : null,
+            boxShadow: widget.boxShadow,
+          ),
+          width: widget.width,
+          height: widget.height ?? 52,
+          padding: EdgeInsets.all(widget.padding),
+          child: Center(child: inner),
         ),
-        width: widget.width,
-        height: widget.height ?? 52,
-        padding: EdgeInsets.all(widget.padding),
-        child: Center(child: inner),
       ),
     );
   }
