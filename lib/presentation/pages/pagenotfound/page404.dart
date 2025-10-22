@@ -36,8 +36,6 @@ class NotFoundPage extends StatelessWidget {
                       height: 140,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 32),
-
                     // Título
                     Text(
                       title,
@@ -65,8 +63,7 @@ class NotFoundPage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Botón inferior "Registrarse"
+            
             Positioned(
               left: 20,
               right: 20,
@@ -82,7 +79,7 @@ class NotFoundPage extends StatelessWidget {
                   shape: const StadiumBorder(),
                 ),
                 child: const Text(
-                  'Registrarse',
+                  'Regresar',
                   style: TextStyle(
                     fontFamily: robotoBold,
                     fontSize: 20,
