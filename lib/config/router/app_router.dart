@@ -19,6 +19,20 @@ final appRouter = GoRouter(
       path: '/register-form',
       name: RegisterFormPage.name,
       builder: (context, state) => const RegisterFormPage(),
+    ),
+    GoRoute(
+      path: '/404',
+      name: NotFoundPage.name,
+      builder: (context, state) => const NotFoundPage(),
     )
   ],
+  errorBuilder: (context, state) {
+    return const NotFoundPage(); 
+  },
+
+  // (opcional) transición y/o page-level:
+  // errorPageBuilder: (context, state) => MaterialPage(
+  //   key: state.pageKey,
+  //   child: const NotFoundPage(),
+  // ),
 );

@@ -6,6 +6,7 @@ const pdfPrescription = 'assets/prescription.pdf';
 const logoBlue = 'assets/logo/EssaPlusBlue.png';
 
 //colors
+const buttonprimary = Color(0xFF3C82C3);
 const background = Color(0xFFF7FBFF);
 const primary = Color(0xff004FB7);
 const primaryActive = Color(0xff003F92);
