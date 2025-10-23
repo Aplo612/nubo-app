@@ -2,3 +2,8 @@ export 'package:nubo/presentation/pages/loginpage/login_page.dart';
 export 'package:nubo/presentation/pages/loginpage/login_form_page.dart';
 export 'package:nubo/presentation/pages/registerpage/registerpage.dart';
 export 'package:nubo/presentation/pages/pagenotfound/page404.dart';
+export 'package:nubo/presentation/pages/main_scaffold/main_scaffold_template.dart';
+export 'package:nubo/presentation/pages/main_menu/mainmenu.dart';
+export 'package:nubo/presentation/pages/misiones/misionespage.dart';
+export 'package:nubo/presentation/pages/perfil/perfildart.dart';
+export 'package:nubo/presentation/pages/rewards/rewardspage.dart';
