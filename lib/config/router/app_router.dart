@@ -26,7 +26,7 @@ final appRouter = GoRouter(
       builder: (context, state) => const RegisterFormPage(),
     ),
 
-    // ---------- Shell con BottomNav persistente ----------
+    // aqui pongan las partes que necesitan el menu persistentes de abajo
     ShellRoute(
       navigatorKey: _shellKey,
       builder: (context, state, child) => MainMenuScaffold(child: child),
