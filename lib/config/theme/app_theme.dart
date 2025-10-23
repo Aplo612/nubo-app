@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   ThemeData getTheme() => ThemeData(
         useMaterial3: true,
-        fontFamily: robotoMedium,
+        fontFamily: robotoLight,
         appBarTheme: const AppBarTheme(centerTitle: false),
 
         //colors of Brightness.light
