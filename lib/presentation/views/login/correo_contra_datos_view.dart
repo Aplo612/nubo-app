@@ -5,6 +5,7 @@ import 'package:nubo/config/config.dart';
 import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_passwordtextfield.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_textfield.dart';
+import 'package:nubo/services/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -17,6 +18,7 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _correoController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -97,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    context.push('/recuperar');
+                    _showPasswordResetDialog();
                   },
                   child: Text(
                     "¿Olvidaste tu contraseña?",
@@ -114,37 +116,23 @@ class _LoginFormState extends State<LoginForm> {
 
               // Botón principal de inicio de sesión
               ButtonCustom(
-                text: "Iniciar Sesión",
+                text: _isLoading ? "Iniciando sesión..." : "Iniciar Sesión",
                 width: double.infinity,
                 padding: 14,
                 color: const Color(0xFF3C82C3),
                 colorHover: const Color(0xFF2E6EAC),
                 colorText: Colors.white,
                 fontsizeText: 18,
-                onPressed: () {
+                enabled: !_isLoading,
+                onPressed: _isLoading ? null : () async {
                   if (_formKey.currentState!.validate()) {
-                    // TODO: Autenticación real (backend )
-                    context.pushReplacement('/home');
-                  }  else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            'Por favor, corrige los errores antes de continuar',
-                            style: TextStyle(
-                              fontFamily: robotoSemiCondensedLight, // 👈 tu fuente personalizada
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 2),
-                          backgroundColor: Colors.black87, // opcional, más contraste
-                          behavior: SnackBarBehavior.floating, // opcional, más moderno
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      );
-                    }
+                    await _signInWithEmailAndPassword();
+                  } else {
+                    AuthService.showErrorSnackBar(
+                      context,
+                      'Por favor, corrige los errores antes de continuar',
+                    );
+                  }
                 },
                 boxShadow: const [
                   BoxShadow(
@@ -256,6 +244,107 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ),
       ),
+    );
+  }
+
+  // Método para iniciar sesión con Firebase Auth
+  Future<void> _signInWithEmailAndPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await AuthService.signInWithEmailAndPassword(
+        email: _correoController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      // Si el login es exitoso, navegar al home
+      if (mounted) {
+        AuthService.showSuccessSnackBar(context, '¡Inicio de sesión exitoso!');
+        context.pushReplacement('/home');
+      }
+    } catch (e) {
+      if (mounted) {
+        AuthService.showErrorSnackBar(context, e.toString());
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  // Método para mostrar diálogo de recuperación de contraseña
+  void _showPasswordResetDialog() {
+    final TextEditingController emailController = TextEditingController();
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Recuperar Contraseña',
+            style: TextStyle(
+              fontFamily: robotoBold,
+              fontSize: 18,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Ingresa tu correo electrónico para recibir un enlace de recuperación:',
+                style: TextStyle(
+                  fontFamily: robotoRegular,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Correo electrónico',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (emailController.text.isNotEmpty) {
+                  try {
+                    await AuthService.sendPasswordResetEmail(emailController.text.trim());
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                      AuthService.showSuccessSnackBar(
+                        context,
+                        'Se ha enviado un enlace de recuperación a tu correo.',
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      AuthService.showErrorSnackBar(context, e.toString());
+                    }
+                  }
+                } else {
+                  AuthService.showErrorSnackBar(context, 'Por favor, ingresa tu correo electrónico.');
+                }
+              },
+              child: const Text('Enviar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
