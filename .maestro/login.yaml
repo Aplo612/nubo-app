@@ -1,7 +1,7 @@
 appId: com.example.nubo_app
 env:
-  USERNAME: ${email || "adriantest132@protonmail.com"}
-  PASSWORD: ${password || "Helper132#"}
+  USERNAME: ${MAESTRO_EMAIL}
+  PASSWORD: ${MAESTRO_PASSWORD }
 ---
 - launchApp:
     clearState: true
@@ -11,9 +11,9 @@ env:
     timeout: 10000
 - assertVisible: Iniciar Sesión
 - tapOn: Correo
-- inputText: ${email}
+- inputText: ${USERNAME}
 - tapOn: Contraseña
-- inputText: ${password}
+- inputText: ${PASSWORD}
 - tapOn:
     text: Iniciar Sesión
     index: 1
