@@ -259,38 +259,55 @@ class _RegisterFormState extends State<RegisterForm> {
 
   // Método para registrar usuario con Firebase Auth
   Future<void> _registerWithEmailAndPassword() async {
+    if (_isLoading) return; // evita taps dobles
+
+    final email = _emailController.text.trim();
+    final pass  = _passController.text;
+    final user  = _userController.text.trim();
+
+    // Validación rápida
+    if (email.isEmpty || pass.isEmpty || user.isEmpty) {
+      SnackbarUtil.showSnack(
+        context,
+        message: 'Completa email, contraseña y nombre de usuario.',
+        backgroundColor: Colors.red.shade600,
+        duration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
 
-    try {
-      // Crear usuario con Firebase Auth
+    try {  
+      // 1) Crear usuario
       await AuthService.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passController.text,
+        email: email,
+        password: pass,
       );
 
-      // Actualizar el perfil del usuario con el nombre de usuario
-      await AuthService.updateUserProfile(
-        displayName: _userController.text.trim(),
-      );
+      // 2) Actualizar perfil
+      await AuthService.updateUserProfile(displayName: user);
 
-      // Enviar email de verificación
+      // 3) Enviar verificación
       await AuthService.sendEmailVerification();
 
-      if (mounted) {
-        AuthService.showSuccessSnackBar(
-          context,
-          '¡Registro exitoso! Se ha enviado un email de verificación.',
-        );
-        
-        // Navegar de vuelta al login
-        context.pop();
-      }
+      // Tras los awaits, proteger el BuildContext que vas a usar
+      if (!context.mounted) return;
+
+      SnackbarUtil.showSnack(
+        context,
+        message: '¡Registro exitoso! Revisa tu correo para verificar tu cuenta.',
+        backgroundColor: Colors.green.shade600,
+        duration: const Duration(seconds: 10),
+      );
+
+      // Navega “seguro” (pop si puede, o tu fallback)
+      NavigationHelper.safePop(context);
     } catch (e) {
-      if (mounted) {
-        AuthService.showErrorSnackBar(context, e.toString());
-      }
+      if(!context.mounted) return;
+      SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
     } finally {
       if (mounted) {
         setState(() {

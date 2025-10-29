@@ -6,16 +6,17 @@ class SnackbarUtil {
     BuildContext context, {
     required String message,
     Color? backgroundColor,
+    Color? letterColor,
     Duration duration = const Duration(seconds: 2),
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: robotoRegular,
             fontSize: 16,
-            color: Colors.white,
+            color: letterColor ?? Colors.white,
           ),
         ),
         duration: duration,

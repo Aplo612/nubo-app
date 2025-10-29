@@ -118,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
 
               // Botón principal de inicio de sesión
               ButtonCustom(
-                text: _isLoading ? "Iniciando sesión..." : "Iniciar Sesión",
+                text: _isLoading ? "..." : "Iniciar Sesión",
                 width: double.infinity,
                 padding: 14,
                 color: const Color(0xFF3C82C3),
@@ -260,12 +260,12 @@ class _LoginFormState extends State<LoginForm> {
 
       // Si el login es exitoso, navegar al home
       if (mounted) {
-        AuthService.showSuccessSnackBar(context, '¡Inicio de sesión exitoso!');
-        context.pushReplacement('/home');
+        SnackbarUtil.showSnack(context, message: '¡Inicio de sesión exitoso!', backgroundColor: Colors.green.shade600);
+        NavigationHelper.safePushReplacement(context,'/home');
       }
     } catch (e) {
       if (mounted) {
-        AuthService.showErrorSnackBar(context, e.toString());
+        SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: Duration(seconds: 3));
       }
     } finally {
       if (mounted) {
@@ -323,20 +323,15 @@ class _LoginFormState extends State<LoginForm> {
                 if (emailController.text.isNotEmpty) {
                   try {
                     await AuthService.sendPasswordResetEmail(emailController.text.trim());
-                    if (mounted) {
-                      Navigator.of(context).pop();
-                      AuthService.showSuccessSnackBar(
-                        context,
-                        'Se ha enviado un enlace de recuperación a tu correo.',
-                      );
-                    }
+                    if (!context.mounted) return;
+                    NavigationHelper.safePop(context);
+                    SnackbarUtil.showSnack(context, message: '¡Inicio de sesión exitoso!', backgroundColor: Colors.green.shade600);
                   } catch (e) {
-                    if (mounted) {
-                      AuthService.showErrorSnackBar(context, e.toString());
-                    }
+                    if (!context.mounted) return;
+                    SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
                   }
                 } else {
-                  AuthService.showErrorSnackBar(context, 'Por favor, ingresa tu correo electrónico.');
+                  SnackbarUtil.showSnack(context, message: 'Por favor, ingresa tu correo electrónico.' , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
                 }
               },
               child: const Text('Enviar'),

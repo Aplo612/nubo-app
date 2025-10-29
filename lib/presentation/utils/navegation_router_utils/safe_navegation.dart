@@ -21,4 +21,11 @@ class NavigationHelper {
     final router = GoRouter.of(context);
     router.push(page);
   }
+
+   static void safePushReplacement(BuildContext context, String page){
+    // TODO: Implementar un safe pushReplacement, para evitar redundancia en la pila
+    // chatgpt no ayuda y estoy muy cansado ahorita para viajar por documentacion
+    final router = GoRouter.of(context);
+    router.pushReplacement(page);
+  }
 }

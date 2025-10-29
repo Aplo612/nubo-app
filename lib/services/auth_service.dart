@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -58,6 +57,7 @@ class AuthService {
   // Método para enviar email de verificación
   static Future<void> sendEmailVerification() async {
     try {
+      _auth.setLanguageCode('es');
       final user = _auth.currentUser;
       if (user != null && !user.emailVerified) {
         await user.sendEmailVerification();
@@ -120,49 +120,5 @@ class AuthService {
       default:
         return 'Error de autenticación: ${e.message}';
     }
-  }
-
-  // Método para mostrar SnackBar con mensaje de error
-  static void showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(
-            fontFamily: 'robotoSemiCondensedLight',
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.red.shade600,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-
-  // Método para mostrar SnackBar con mensaje de éxito
-  static void showSuccessSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(
-            fontFamily: 'robotoSemiCondensedLight',
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.green.shade600,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
   }
 }
