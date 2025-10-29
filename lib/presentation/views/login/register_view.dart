@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
 import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_passwordtextfield.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_textfield.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -50,7 +51,7 @@ class _RegisterFormState extends State<RegisterForm> {
               alignment: Alignment.centerLeft,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.pop(),
+                onPressed: () => NavigationHelper.safePop(context), // vuelve al login
               ),
             ),
 
@@ -164,7 +165,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       decoration: TextDecoration.underline,
                     ),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () => context.pop(),
+                      ..onTap = () => NavigationHelper.safePop(context), // vuelve al login
                   ),
                 ],
               ),
@@ -213,33 +214,10 @@ class _RegisterFormState extends State<RegisterForm> {
 
                 if (_formKey.currentState!.validate()) {
                   // TODO: lógica real de registro (API, Supabase, etc.)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Registro exitoso'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-
-                  context.pop(); // vuelve al login
+                  SnackbarUtil.showSnack(context, message: 'Registro exitoso');
+                  NavigationHelper.safePop(context); // vuelve al login
                 } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text(
-                        'Por favor, corrige los errores antes de continuar',
-                        style: TextStyle(
-                          fontFamily: robotoSemiCondensedLight, // 👈 tu fuente personalizada
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.black87, // opcional, más contraste
-                      behavior: SnackBarBehavior.floating, // opcional, más moderno
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Corrige los errores antes de continuar');
                 }
               },
               width: double.infinity,

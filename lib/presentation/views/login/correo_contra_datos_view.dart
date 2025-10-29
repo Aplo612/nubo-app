@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
 import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_passwordtextfield.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_textfield.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -42,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () => context.pop(),
+                  onPressed: () => NavigationHelper.safePop(context)
                 ),
               ),
 
@@ -97,7 +98,7 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    context.push('/recuperar');
+                    NavigationHelper.safePush(context, 'recuperar');
                   },
                   child: Text(
                     "¿Olvidaste tu contraseña?",
@@ -124,27 +125,10 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // TODO: Autenticación real (backend )
-                    context.pushReplacement('/home');
-                  }  else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            'Por favor, corrige los errores antes de continuar',
-                            style: TextStyle(
-                              fontFamily: robotoSemiCondensedLight, // 👈 tu fuente personalizada
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 2),
-                          backgroundColor: Colors.black87, // opcional, más contraste
-                          behavior: SnackBarBehavior.floating, // opcional, más moderno
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      );
-                    }
+                    NavigationHelper.safePush(context,'/home');
+                  } else {
+                    SnackbarUtil.showSnack(context, message: "Corrige los errores antes de continuar");
+                  }
                 },
                 boxShadow: const [
                   BoxShadow(
@@ -170,7 +154,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: () => context.push('/register'),
+                    onTap: () => NavigationHelper.safePush(context,'/register'),
                     child: Text(
                       "Regístrate",
                       style: textTheme.bodyMedium?.copyWith(

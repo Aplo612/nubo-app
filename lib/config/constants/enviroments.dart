@@ -102,3 +102,14 @@ const robotoSemiCondensedSemiBold = 'robotoSemiCondensedSemiBold';
 const robotoSemiCondensedSemiBoldItalic = 'robotoSemiCondensedSemiBoldItalic';
 const robotoSemiCondensedThin = 'robotoSemiCondensedThin';
 const robotoSemiCondensedThinItalic = 'robotoSemiCondensedThinItalic';
+
+// svg
+const recycleSvg = 'assets/icons-svg/recycle.svg';
+const lightingSvg = 'assets/icons-svg/lightning.svg';
+const trashSvg = 'assets/icons-svg/trash.svg';
+const streakSvg = 'assets/icons-svg/streak.svg';
+
+// img - png
+
+const recycleGreen = 'assets/main-menu/recycle_green.png';
+const rewardsOrange = 'assets/main-menu/rewards.png';

@@ -31,7 +31,7 @@ class AppTheme {
           ),
           // BlackItalic 18
           displayMedium: TextStyle(
-            fontFamily: robotoBlackItalic,
+            fontFamily: robotoBlack,
             fontSize: 18,
           ),
 
@@ -42,7 +42,7 @@ class AppTheme {
           ),
           // BoldItalic 16
           bodyMedium: TextStyle(
-            fontFamily: robotoBoldItalic,
+            fontFamily: robotoBold,
             fontSize: 16,
           ),
 
@@ -53,7 +53,7 @@ class AppTheme {
           ),
           // SemiBoldItalic 14
           headlineMedium: TextStyle(
-            fontFamily: robotoSemiBoldItalic,
+            fontFamily: robotoSemiBold,
             fontSize: 14,
           ),
 
@@ -64,7 +64,7 @@ class AppTheme {
           ),
           // MediumItalic 12
           titleMedium: TextStyle(
-            fontFamily: robotoMediumItalic,
+            fontFamily: robotoMedium,
             fontSize: 12,
           ),
 
@@ -75,7 +75,7 @@ class AppTheme {
           ),
           // Italic 12
           labelSmall: TextStyle(
-            fontFamily: robotoItalic,
+            fontFamily: robotoExtraLight,
             fontSize: 12,
           ),
 
@@ -86,7 +86,7 @@ class AppTheme {
           ),
           // LightItalic 11
           labelLarge: TextStyle(
-            fontFamily: robotoLightItalic,
+            fontFamily: robotoLight,
             fontSize: 11,
           ),
 
@@ -97,7 +97,7 @@ class AppTheme {
           ),
           // ExtraLightItalic 10
           displaySmall: TextStyle(
-            fontFamily: robotoExtraLightItalic,
+            fontFamily: robotoExtraLight,
             fontSize: 10,
           ),
         ),

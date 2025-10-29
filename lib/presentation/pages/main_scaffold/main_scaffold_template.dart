@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 
 class MainMenuScaffold extends StatelessWidget {
   final Widget child;
@@ -15,10 +16,10 @@ class MainMenuScaffold extends StatelessWidget {
 
   void _onTap(BuildContext context, int index) {
     switch (index) {
-      case 0: context.go('/home'); break;
-      case 1: context.go('/missions'); break;
-      case 2: context.go('/rewards'); break;
-      case 3: context.go('/profile'); break;
+      case 0: NavigationHelper.safePush(context, '/home'); break;
+      case 1: NavigationHelper.safePush(context, '/missions'); break;
+      case 2: NavigationHelper.safePush(context, '/rewards'); break;
+      case 3: NavigationHelper.safePush(context, '/profile'); break;
     }
   }
 
@@ -31,6 +32,7 @@ class MainMenuScaffold extends StatelessWidget {
       body: child,
       backgroundColor: background,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: white,
         currentIndex: currentIndex,
         onTap: (i) => _onTap(context, i),
         type: BottomNavigationBarType.fixed,

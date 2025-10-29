@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:nubo/config/config.dart';
 
 class HomeGreetingHeader extends StatelessWidget {
@@ -45,7 +46,6 @@ class HomeGreetingHeader extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // --- Texto y racha ---
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,20 +61,24 @@ class HomeGreetingHeader extends StatelessWidget {
                           style: subtitleStyle,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Image.asset(
-                        'assets/streak-related/streak.png',
-                        width: 32,
-                        height: 32,
+                      const SizedBox(width: 0),
+                      SvgPicture.asset(
+                        streakSvg,
+                        width: 24,
+                        height: 29,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.orange,
+                          BlendMode.srcIn,
+                        ),
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 0),
                       Text('$streak', style: streakNumberStyle),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 0),
             // --- Mascota ---
             Image.asset(
               'assets/logo/nubo_sin_fondo.png',
