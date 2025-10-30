@@ -108,6 +108,7 @@ const recycleSvg = 'assets/icons-svg/recycle.svg';
 const lightingSvg = 'assets/icons-svg/lightning.svg';
 const trashSvg = 'assets/icons-svg/trash.svg';
 const streakSvg = 'assets/icons-svg/streak.svg';
+const nuboCoinSvg = 'assets/icons-svg/nubo_coin.svg';
 
 // img - png
 
