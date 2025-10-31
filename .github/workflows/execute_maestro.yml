@@ -1,0 +1,25 @@
+name: Build and run Maestro tests (Native Android)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  maestro-cloud:
+    runs-on: ubuntu-latest
+    outputs:
+      app: app/build/outputs/apk/debug
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run Maestro Cloud tests
+        uses: mobile-dev-inc/action-maestro-cloud@v2
+        with:
+          api-key: ${{ secrets.MAESTRO_API_KEY }}
+          project-id: ${{ secrets.MAESTRO_PROJECT_ID }}
+          app-file: test-apk/app-release.apk 
+          env: |
+            MAESTRO_EMAIL=${{ secrets.MAESTRO_EMAIL }}
+            MAESTRO_PASSWORD=${{ secrets.MAESTRO_PASSWORD }}

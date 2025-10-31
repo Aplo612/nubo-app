@@ -141,7 +141,7 @@ class _PasswordFieldState extends State<PasswordField> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 6)
         ],
 
         TextFormField(

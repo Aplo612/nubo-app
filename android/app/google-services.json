@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "1068135614331",
+      "project_id": "nubo-bd18c",
+      "storage_bucket": "nubo-bd18c.firebasestorage.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:1068135614331:android:b4ae9e51f23a9d4a015fde",
+          "android_client_info": {
+            "package_name": "com.example.nubo_app"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyAEAGUQ1hzfdkW3HqhCCTRscZkCc66aZeI"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
