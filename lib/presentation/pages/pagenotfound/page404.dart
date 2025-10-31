@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; 
 import 'package:nubo/config/config.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 
 class NotFoundPage extends StatelessWidget {
   static const String name = "404";
@@ -69,7 +69,9 @@ class NotFoundPage extends StatelessWidget {
               right: 20,
               bottom: 24,
               child: ElevatedButton(
-                onPressed: () => context.pop(),
+                onPressed: () {
+                  NavigationHelper.safePop(context);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: background,
                   foregroundColor: buttonprimary,

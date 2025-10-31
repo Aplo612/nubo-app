@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
 import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_passwordtextfield.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_textfield.dart';
+import 'package:nubo/services/auth_service.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -24,6 +26,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _repeatController = TextEditingController();
 
   bool _termsAccepted = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -50,7 +53,7 @@ class _RegisterFormState extends State<RegisterForm> {
               alignment: Alignment.centerLeft,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.pop(),
+                onPressed: () => NavigationHelper.safePop(context), // vuelve al login
               ),
             ),
 
@@ -164,7 +167,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       decoration: TextDecoration.underline,
                     ),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () => context.pop(),
+                      ..onTap = () => NavigationHelper.safePop(context), // vuelve al login
                   ),
                 ],
               ),
@@ -205,41 +208,16 @@ class _RegisterFormState extends State<RegisterForm> {
 
             // Botón principal Registrarse
             ButtonCustom(
-              text: "Registrarse",
-              enabled: _termsAccepted, // controla si el botón se ve activo o gris
+              text: _isLoading ? "Registrando..." : "Registrarse",
+              enabled: _termsAccepted && !_isLoading, // controla si el botón se ve activo o gris
               onPressed: () {
                 // si no está habilitado, salimos sin hacer nada
-                if (!_termsAccepted) return;
+                if (!_termsAccepted || _isLoading) return;
 
                 if (_formKey.currentState!.validate()) {
-                  // TODO: lógica real de registro (API, Supabase, etc.)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Registro exitoso'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-
-                  context.pop(); // vuelve al login
+                  _registerWithEmailAndPassword();
                 } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text(
-                        'Por favor, corrige los errores antes de continuar',
-                        style: TextStyle(
-                          fontFamily: robotoSemiCondensedLight, // 👈 tu fuente personalizada
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.black87, // opcional, más contraste
-                      behavior: SnackBarBehavior.floating, // opcional, más moderno
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Corrige los errores antes de continuar');
                 }
               },
               width: double.infinity,
@@ -277,5 +255,65 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
       ),
     );
+  }
+
+  // Método para registrar usuario con Firebase Auth
+  Future<void> _registerWithEmailAndPassword() async {
+    if (_isLoading) return; // evita taps dobles
+
+    final email = _emailController.text.trim();
+    final pass  = _passController.text;
+    final user  = _userController.text.trim();
+
+    // Validación rápida
+    if (email.isEmpty || pass.isEmpty || user.isEmpty) {
+      SnackbarUtil.showSnack(
+        context,
+        message: 'Completa email, contraseña y nombre de usuario.',
+        backgroundColor: Colors.red.shade600,
+        duration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {  
+      // 1) Crear usuario
+      await AuthService.createUserWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      // 2) Actualizar perfil
+      await AuthService.updateUserProfile(displayName: user);
+
+      // 3) Enviar verificación
+      await AuthService.sendEmailVerification();
+
+      // Tras los awaits, proteger el BuildContext que vas a usar
+      if (!context.mounted) return;
+
+      SnackbarUtil.showSnack(
+        context,
+        message: '¡Registro exitoso! Revisa tu correo para verificar tu cuenta.',
+        backgroundColor: Colors.green.shade600,
+        duration: const Duration(seconds: 10),
+      );
+
+      // Navega “seguro” (pop si puede, o tu fallback)
+      NavigationHelper.safePop(context);
+    } catch (e) {
+      if(!context.mounted) return;
+      SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }
