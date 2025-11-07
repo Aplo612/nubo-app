@@ -1,4 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+// Envío deshabilitado por ahora:
+// import 'package:nubo/services/email_sender.dart';
+
+import 'ingresar_codigo_page.dart';
 
 class RecuperarContrasenaPage extends StatefulWidget {
   const RecuperarContrasenaPage({super.key});
@@ -10,6 +17,7 @@ class RecuperarContrasenaPage extends StatefulWidget {
 class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -27,15 +35,49 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
 
   Future<void> _onContinuar() async {
     if (!_formKey.currentState!.validate()) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Si el correo existe, enviaremos un mensaje.')),
+    final email = _emailCtrl.text.trim();
+
+    // Si el correo es "ok@demo.com", mostramos modal de "no registrado" y salimos.
+    if (email.toLowerCase() == 'ok@demo.com') {
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Correo no registrado'),
+          content: const Text(
+            'El correo ingresado no se encuentra registrado. '
+            'Verifique la dirección o comuníquese con soporte.'
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Entendido'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Por ahora NO enviamos correo. (Dejar preparado para futuro)
+    // setState(() => _isLoading = true);
+    // try {
+    //   final ok = await enviarCodigoProvisional(email);
+    //   // Manejo de ok / error...
+    // } catch (_) {} finally {
+    //   if (mounted) setState(() => _isLoading = false);
+    // }
+
+    // Navegamos a la pantalla de ingreso de código.
+    if (!mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => IngresarCodigoPage(email: email),
+      ),
     );
   }
 
   void _onEnviarDeNuevo() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Reenviando correo…')),
-    );
+    _onContinuar();
   }
 
   @override
@@ -43,7 +85,7 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // como en la imagen
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -62,7 +104,6 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // título
                   Text(
                     'Recuperar contraseña',
                     textAlign: TextAlign.center,
@@ -72,7 +113,6 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // descripción
                   Text(
                     'Escriba el correo de su cuenta,\nsi existe se le enviará un correo.',
                     textAlign: TextAlign.center,
@@ -82,16 +122,13 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                     ),
                   ),
                   const SizedBox(height: 26),
-
-                  // formulario
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        // caja de correo
                         Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE3E6EB), // gris como el de la imagen
+                            color: const Color(0xFFE3E6EB),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: TextFormField(
@@ -109,12 +146,9 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 14),
-
-                        // enviar de nuevo
                         TextButton(
-                          onPressed: _onEnviarDeNuevo,
+                          onPressed: _isLoading ? null : _onEnviarDeNuevo,
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(0, 0),
@@ -129,15 +163,12 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 14),
-
-                        // botón continuar
                         SizedBox(
                           width: double.infinity,
                           height: 46,
                           child: ElevatedButton(
-                            onPressed: _onContinuar,
+                            onPressed: _isLoading ? null : _onContinuar,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF3C82C3),
                               shape: RoundedRectangleBorder(
@@ -145,22 +176,26 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                               ),
                               elevation: 0,
                             ),
-                            child: const Text(
-                              'Continuar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  )
+                                : const Text(
+                                    'Continuar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 48),
-
                   Text(
                     'Nubo ©Copyright 2025',
                     style: textTheme.bodySmall?.copyWith(
