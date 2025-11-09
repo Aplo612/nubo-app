@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nubo/presentation/pages/pages.dart';
+import 'package:nubo/presentation/screens/recuperar_contrasena_page.dart';
+
 
 final _rootKey = GlobalKey<NavigatorState>();
 final _shellKey = GlobalKey<NavigatorState>();
@@ -29,7 +31,6 @@ final appRouter = GoRouter(
       name: RegisterFormPage.name,
       builder: (context, state) => const RegisterFormPage(),
     ),
-
     // aqui pongan las partes que necesitan el menu persistentes de abajo
     ShellRoute(
       navigatorKey: _shellKey,
