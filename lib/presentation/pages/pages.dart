@@ -7,3 +7,4 @@ export 'package:nubo/presentation/pages/main_menu/mainmenu.dart';
 export 'package:nubo/presentation/pages/misiones/misionespage.dart';
 export 'package:nubo/presentation/pages/perfil/perfildart.dart';
 export 'package:nubo/presentation/pages/rewards/rewardspage.dart';
+export 'package:nubo/presentation/pages/recuperar_contrasenia/recuperar_contrasena_page.dart';

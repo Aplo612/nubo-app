@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nubo/presentation/pages/pages.dart';
-import 'package:nubo/presentation/screens/recuperar_contrasena_page.dart';
 
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -23,7 +22,7 @@ final appRouter = GoRouter(
       builder: (context, state) => const LoginFormPage(),
     ),
     GoRoute(
-      path: '/recuperar-contrasena',
+      path: '/recuperar',
       builder: (context, state) => const RecuperarContrasenaPage(),
     ),
     GoRoute(

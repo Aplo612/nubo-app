@@ -1,11 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-// Envío deshabilitado por ahora:
-// import 'package:nubo/services/email_sender.dart';
-
-import 'ingresar_codigo_page.dart';
+import 'package:nubo/services/auth_service.dart';
 
 class RecuperarContrasenaPage extends StatefulWidget {
   const RecuperarContrasenaPage({super.key});
@@ -37,47 +31,29 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailCtrl.text.trim();
 
-    // Si el correo es "ok@demo.com", mostramos modal de "no registrado" y salimos.
-    if (email.toLowerCase() == 'ok@demo.com') {
-      await showDialog<void>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Correo no registrado'),
-          content: const Text(
-            'El correo ingresado no se encuentra registrado. '
-            'Verifique la dirección o comuníquese con soporte.'
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Entendido'),
-            ),
-          ],
+    setState(() => _isLoading = true);
+    try {
+      await AuthService.sendPasswordResetEmail(email);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Si el correo existe, te enviamos un enlace para restablecer la contraseña.'),
+          duration: Duration(seconds: 4),
         ),
       );
-      return;
+
+      // Opcional: volver al login o mostrar pantalla "Revisa tu correo"
+      Navigator.of(context).maybePop();
+    } catch (e) {
+      if (!mounted) return;
+      // Muestra el mensaje amigable de _handleAuthException si aplica (user-not-found, etc.)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
-
-    // Por ahora NO enviamos correo. (Dejar preparado para futuro)
-    // setState(() => _isLoading = true);
-    // try {
-    //   final ok = await enviarCodigoProvisional(email);
-    //   // Manejo de ok / error...
-    // } catch (_) {} finally {
-    //   if (mounted) setState(() => _isLoading = false);
-    // }
-
-    // Navegamos a la pantalla de ingreso de código.
-    if (!mounted) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => IngresarCodigoPage(email: email),
-      ),
-    );
-  }
-
-  void _onEnviarDeNuevo() {
-    _onContinuar();
   }
 
   @override
@@ -114,7 +90,7 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Escriba el correo de su cuenta,\nsi existe se le enviará un correo.',
+                    'Escriba el correo de su cuenta. Si existe, le enviaremos un enlace para restablecerla.',
                     textAlign: TextAlign.center,
                     style: textTheme.bodyMedium?.copyWith(
                       color: Colors.black54,
@@ -146,24 +122,7 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 14),
-                        TextButton(
-                          onPressed: _isLoading ? null : _onEnviarDeNuevo,
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: const Size(0, 0),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(
-                            'Enviar de nuevo',
-                            style: textTheme.bodyMedium?.copyWith(
-                              color: Colors.black87,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 20),
                         SizedBox(
                           width: double.infinity,
                           height: 46,

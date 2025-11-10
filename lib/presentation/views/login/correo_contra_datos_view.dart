@@ -8,7 +8,6 @@ import 'package:nubo/services/auth_service.dart';
 import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
-
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
@@ -46,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () => NavigationHelper.safePop(context)
+                  onPressed: () => NavigationHelper.safePop(context),
                 ),
               ),
 
@@ -69,8 +68,8 @@ class _LoginFormState extends State<LoginForm> {
                 hintText: "Correo",
                 validador: (String? value) {
                   if (value == null || value.isEmpty) return vacio;
-                  final emailRegex = RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  final emailRegex =
+                      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                   if (!emailRegex.hasMatch(value)) {
                     return 'Ingrese un correo válido';
                   }
@@ -96,13 +95,13 @@ class _LoginFormState extends State<LoginForm> {
 
               const SizedBox(height: 16),
 
-              // Olvidaste tu contraseña
+              // Olvidaste tu contraseña (NAVEGA A OTRA VISTA)
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    _showPasswordResetDialog();
-                    NavigationHelper.safePush(context, 'recuperar');
+                    // Ir a la vista de recuperación (ruta: 'recuperar')
+                    NavigationHelper.safePush(context, '/recuperar');
                   },
                   child: Text(
                     "¿Olvidaste tu contraseña?",
@@ -114,7 +113,6 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
               ),
-
 
               const SizedBox(height: 8),
 
@@ -128,13 +126,17 @@ class _LoginFormState extends State<LoginForm> {
                 colorText: Colors.white,
                 fontsizeText: 18,
                 enabled: !_isLoading,
-                onPressed: _isLoading ? null : () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _signInWithEmailAndPassword();
-                  } else {
-                    SnackbarUtil.showSnack(context, message: "Corrige los errores antes de continuar");
-                  }
-                },
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        if (_formKey.currentState!.validate()) {
+                          await _signInWithEmailAndPassword();
+                        } else {
+                          SnackbarUtil.showSnack(context,
+                              message:
+                                  "Corrige los errores antes de continuar");
+                        }
+                      },
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
@@ -159,7 +161,8 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: () => NavigationHelper.safePush(context,'/register'),
+                    onTap: () =>
+                        NavigationHelper.safePush(context, '/register'),
                     child: Text(
                       "Regístrate",
                       style: textTheme.bodyMedium?.copyWith(
@@ -262,12 +265,17 @@ class _LoginFormState extends State<LoginForm> {
 
       // Si el login es exitoso, navegar al home
       if (mounted) {
-        SnackbarUtil.showSnack(context, message: '¡Inicio de sesión exitoso!', backgroundColor: Colors.green.shade600);
-        NavigationHelper.safePushReplacement(context,'/home');
+        SnackbarUtil.showSnack(context,
+            message: '¡Inicio de sesión exitoso!',
+            backgroundColor: Colors.green.shade600);
+        NavigationHelper.safePushReplacement(context, '/home');
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: Duration(seconds: 3));
+        SnackbarUtil.showSnack(context,
+            message: e.toString(),
+            backgroundColor: Colors.red.shade600,
+            duration: const Duration(seconds: 3));
       }
     } finally {
       if (mounted) {
@@ -276,71 +284,5 @@ class _LoginFormState extends State<LoginForm> {
         });
       }
     }
-  }
-
-  // Método para mostrar diálogo de recuperación de contraseña
-  void _showPasswordResetDialog() {
-    final TextEditingController emailController = TextEditingController();
-    
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Recuperar Contraseña',
-            style: TextStyle(
-              fontFamily: robotoBold,
-              fontSize: 18,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Ingresa tu correo electrónico para recibir un enlace de recuperación:',
-                style: TextStyle(
-                  fontFamily: robotoRegular,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Correo electrónico',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (emailController.text.isNotEmpty) {
-                  try {
-                    await AuthService.sendPasswordResetEmail(emailController.text.trim());
-                    if (!context.mounted) return;
-                    NavigationHelper.safePop(context);
-                    SnackbarUtil.showSnack(context, message: '¡Inicio de sesión exitoso!', backgroundColor: Colors.green.shade600);
-                  } catch (e) {
-                    if (!context.mounted) return;
-                    SnackbarUtil.showSnack(context, message: e.toString() , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
-                  }
-                } else {
-                  SnackbarUtil.showSnack(context, message: 'Por favor, ingresa tu correo electrónico.' , backgroundColor: Colors.red.shade600, duration: const Duration(seconds: 3));
-                }
-              },
-              child: const Text('Enviar'),
-            ),
-          ],
-        );
-      },
-    );
   }
 }

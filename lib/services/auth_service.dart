@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,6 +46,30 @@ class AuthService {
     }
   }
 
+  static Future<bool> emailExists(String email) async {
+    // Normaliza: recorta, quita espacios invisibles y pasa a minúsculas
+    String normalized = email
+        .replaceAll('\u200B', '')   // zero-width space
+        .replaceAll('\u200C', '')
+        .replaceAll('\u200D', '')
+        .replaceAll('\uFEFF', '')
+        .trim()
+        .toLowerCase();
+
+    try {
+      final List<String> methods =
+          await _auth.fetchSignInMethodsForEmail(normalized);
+
+      debugPrint('🔎 fetchSignInMethodsForEmail("$normalized") -> $methods');
+
+      // Si hay cualquier proveedor (password, google.com, etc.) => existe
+      return methods.isNotEmpty;
+    } on FirebaseAuthException catch (e) {
+      // invalid-email u otro => trátalo como no existe
+      debugPrint('⚠️ emailExists error: ${e.code} ${e.message}');
+      return false;
+    }
+  }
   // Método para cerrar sesión
   static Future<void> signOut() async {
     try {
@@ -70,7 +95,8 @@ class AuthService {
   // Método para restablecer contraseña
   static Future<void> sendPasswordResetEmail(String email) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await _auth.setLanguageCode('es'); // 👈 idioma del correo
+      await _auth.sendPasswordResetEmail(email: email.trim());
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
@@ -95,6 +121,7 @@ class AuthService {
       throw Exception('Error al actualizar perfil: $e');
     }
   }
+  
 
   // Método para manejar excepciones de Firebase Auth
   static String _handleAuthException(FirebaseAuthException e) {
@@ -121,4 +148,6 @@ class AuthService {
         return 'Error de autenticación: ${e.message}';
     }
   }
+  
 }
+
