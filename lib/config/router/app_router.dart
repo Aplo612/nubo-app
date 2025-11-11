@@ -55,6 +55,13 @@ final appRouter = GoRouter(
           name: ProfilePage.name,
           pageBuilder: (_, __) => const NoTransitionPage(child: ProfilePage()),
         ),
+        GoRoute(
+          path: '/collection-points',
+          name: 'collectionPoints',
+          pageBuilder: (_, __) => const NoTransitionPage(
+            child: CollectionPointsPage(),
+          ),
+        ),
       ],
     ),
 
@@ -62,6 +69,22 @@ final appRouter = GoRouter(
       path: '/404',
       name: NotFoundPage.name,
       builder: (context, state) => const NotFoundPage(),
+    ),
+    GoRoute(
+      path: '/collection-points/filter',
+      name: 'collectionPointsFilter',
+      pageBuilder: (context, state) {
+        final initialFilter = state.extra as CollectionPointFilter?;
+        return CustomTransitionPage(
+          child: CollectionPointsFilterPage(initialFilter: initialFilter),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final offset = Tween(begin: const Offset(0, 0.1), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeOutCubic))
+                .animate(animation);
+            return SlideTransition(position: offset, child: FadeTransition(opacity: animation, child: child));
+          },
+        );
+      },
     ),
   ],
   errorBuilder: (_, __) => const NotFoundPage(),

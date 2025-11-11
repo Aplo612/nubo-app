@@ -8,3 +8,7 @@ export 'package:nubo/presentation/pages/misiones/misionespage.dart';
 export 'package:nubo/presentation/pages/perfil/perfildart.dart';
 export 'package:nubo/presentation/pages/rewards/rewardspage.dart';
 export 'package:nubo/presentation/pages/recuperar_contrasenia/recuperar_contrasena_page.dart';
+export 'package:nubo/presentation/pages/puntosAcopio/collection_points_page.dart';
+export 'package:nubo/presentation/pages/puntosAcopio/collection_points_filter_page.dart';
+export 'package:nubo/features/collection_points/data/collection_points_repo.dart';
+export 'package:nubo/features/collection_points/domain/collection_point.dart';
