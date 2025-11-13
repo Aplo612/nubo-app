@@ -1,0 +1,23 @@
+appId: com.example.nubo_app
+env:
+  USERNAME: ${MAESTRO_EMAIL}
+  PASSWORD: ${MAESTRO_PASSWORD}
+---
+- launchApp:
+    clearState: true
+- tapOn: Ingresar
+- extendedWaitUntil:
+    visible: Iniciar Sesión
+    timeout: 10000
+- assertVisible: Iniciar Sesión
+- tapOn: Correo
+- inputText: " "
+- tapOn: Contraseña
+- inputText: " "
+- tapOn:
+    text: Iniciar Sesión
+    index: 1
+- assertVisible: No puede dejar este campo vacío
+- assertVisible:
+    text: No puede dejar este campo vacío
+    index: 1

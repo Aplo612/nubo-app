@@ -1,0 +1,19 @@
+appId: com.example.nubo_app
+env:
+  USERNAME: ${MAESTRO_EMAIL}
+  PASSWORD: ${MAESTRO_PASSWORD}
+---
+- launchApp:
+    clearState: true
+- tapOn: Ingresar
+- extendedWaitUntil:
+    visible: Iniciar Sesión
+    timeout: 10000
+- assertVisible: Iniciar Sesión
+- tapOn: Correo
+- inputText: ${USERNAME}
+- tapOn: Contraseña
+- inputText: ${PASSWORD}
+- assertVisible: ••••••••••
+- tapOn: Mostrar contraseña
+- assertVisible: ${PASSWORD}

@@ -1,0 +1,23 @@
+appId: com.example.nubo_app
+env:
+  USERNAME: ${MAESTRO_EMAIL}
+  PASSWORD: ${MAESTRO_PASSWORD}
+---
+- launchApp:
+    clearState: true
+- tapOn: Ingresar
+- extendedWaitUntil:
+    visible: Iniciar Sesión
+    timeout: 10000
+- assertVisible: Iniciar Sesión
+- tapOn: Correo
+- inputText: ${USERNAME}
+- tapOn: Contraseña
+- inputText: "h#"
+- tapOn:
+    text: Iniciar Sesión
+    index: 1
+- extendedWaitUntil:
+    visible: Mascota Nubo saludando
+    timeout: 10000
+- assertNotVisible: Mascota Nubo saludando

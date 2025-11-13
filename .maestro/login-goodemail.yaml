@@ -1,7 +1,6 @@
 appId: com.example.nubo_app
 env:
-  USERNAME: ${MAESTRO_EMAIL}
-  PASSWORD: ${MAESTRO_PASSWORD }
+  PASSWORD: ${MAESTRO_PASSWORD}
 ---
 - launchApp:
     clearState: true
@@ -11,13 +10,11 @@ env:
     timeout: 10000
 - assertVisible: Iniciar Sesión
 - tapOn: Correo
-- inputText: ${USERNAME}
+- inputText: "!!@protonmail.e"
 - tapOn: Contraseña
-- inputText: ${PASSWORD}
+- inputText: "H12"
 - tapOn:
     text: Iniciar Sesión
     index: 1
-- extendedWaitUntil:
-    visible: Mascota Nubo saludando
-    timeout: 10000
-- assertVisible: Mascota Nubo saludando
+- assertVisible: Ingrese un correo válido
+- assertVisible: Debe tener al menos 6 caracteres
