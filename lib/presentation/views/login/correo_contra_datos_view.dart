@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
 import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
@@ -155,8 +156,7 @@ class _LoginFormState extends State<LoginForm> {
                                   // Olvidaste tu contraseña
                                   TextButton(
                                     onPressed: () {
-                                      _showPasswordResetDialog();
-                                      NavigationHelper.safePush(context, 'recuperar');
+                                      NavigationHelper.safePush(context, '/recuperar');
                                     },
                                     child: Text(
                                       "¿Olvidaste tu contraseña?",

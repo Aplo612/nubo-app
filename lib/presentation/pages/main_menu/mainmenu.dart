@@ -8,6 +8,8 @@ import 'package:nubo/presentation/views/home/headerwidget.dart';
 import 'package:nubo/presentation/views/home/missionswidget/mission_widget.dart';
 import 'package:nubo/presentation/views/home/recyclewidget/recycle_widget.dart';
 import 'package:nubo/presentation/views/home/rewards/rewards_widget.dart';
+import 'package:nubo/presentation/views/home/puntosAcopio/puntos_acopio_widget.dart'; // ajusta la ruta según tu estructura
+
 
 class HomePage extends StatelessWidget {
   static const String name = 'home_page';
@@ -66,6 +68,10 @@ class HomePage extends StatelessWidget {
                   NavigationHelper.safePush(context, '/rewards');
                 },
                 iconAsset: rewardsOrange, // tu PNG
+              ),
+              CollectionPointsSection(
+                onSeeAll: () => NavigationHelper.safePush(context, '/collection-points'),
+                onOpenMap: () => NavigationHelper.safePush(context, '/collection-points'),
               ),
             ],
           ),
