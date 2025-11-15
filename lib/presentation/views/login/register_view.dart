@@ -400,6 +400,7 @@ class _RegisterFormState extends State<RegisterForm> {
       await AuthService.createUserWithEmailAndPassword(
         email: email,
         password: pass,
+        displayName:  user,
       );
 
       // 2) Actualizar perfil
