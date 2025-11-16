@@ -186,8 +186,11 @@ class _Block3DNoSide extends StatelessWidget {
     required this.top,
     required this.topDepth,
     required this.topShape,
+    // ignore: unused_element_parameter
     this.frontLabel,
+    // ignore: unused_element_parameter
     this.frontLabelStyle,
+    // ignore: unused_element_parameter
     this.frontLabelPadding,
     this.frontLabelMain,
     this.frontLabelSuffix,
@@ -200,8 +203,11 @@ class _Block3DNoSide extends StatelessWidget {
     this.frontBadgeGap = 6,         // separación bajo el título
     this.frontBadgePadding,         // padding interno del badge
     this.frontBadgeBgColor,         // color de fondo del badge
+    // ignore: unused_element_parameter
     this.frontBadgeTextStyle,       // estilo del número
+    // ignore: unused_element_parameter
     this.frontBadgeRadius = 14,     // radio esquinas
+    // ignore: unused_element_parameter
     this.frontBadgeIconSize,        // tamaño del icono dentro del badge
   });
 
@@ -315,7 +321,7 @@ class _Block3DNoSide extends StatelessWidget {
                             useSvg: frontBadgeUseSvg,
                             padding: frontBadgePadding ??
                                 const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            bgColor: frontBadgeBgColor ?? Colors.white.withOpacity(0.85),
+                            bgColor: frontBadgeBgColor ?? Colors.white.withValues(alpha:0.85),
                             textStyle: frontBadgeTextStyle ??
                                 GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w700,
@@ -426,7 +432,9 @@ class _BarWithAvatar extends StatelessWidget {
     required this.topDepth,
     required this.child,
     this.avatarImage,
+    // ignore: unused_element_parameter
     this.avatarScale = 0.78,  // diámetro ≈ width * 0.9
+    // ignore: unused_element_parameter
     this.overlapFactor = 0.1, // % del diámetro que “entra” sobre la tapa
     // 👑 Corona (opcional)
     this.crownAsset,

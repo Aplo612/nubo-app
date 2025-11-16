@@ -10,7 +10,7 @@ class StatsCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -112,19 +112,19 @@ class _StatCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF0F233D),
+                color: Colors.black87,
                 fontFamily: robotoBold,
               ),
             ),
             const SizedBox(height: 2),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: Color(0xFF8A97A8),
+                color: gray400,
                 fontWeight: FontWeight.w600,
                 fontFamily: robotoMedium,
               ),

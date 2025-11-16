@@ -13,7 +13,7 @@ class CollectionPointsPage extends StatefulWidget {
 class _CollectionPointsPageState extends State<CollectionPointsPage> {
   final _repo = CollectionPointsRepoMock();
   CollectionPointFilter _filter = const CollectionPointFilter();
-  bool _onlyNearby = true; // “Puntos cercanos” del wireframe
+  final bool _onlyNearby = true; // “Puntos cercanos” del wireframe
   MissionState? _chipState; // null/todos, activo, inactivo
 
   Future<List<CollectionPoint>> _load() => _repo.fetch(
@@ -36,9 +36,9 @@ class _CollectionPointsPageState extends State<CollectionPointsPage> {
               Container(
                 height: 160,
                 decoration: BoxDecoration(
-                  color: color.surfaceVariant.withOpacity(0.45),
+                  color: color.surfaceContainerHighest.withValues(alpha:0.45),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: color.outlineVariant.withOpacity(0.5)),
+                  border: Border.all(color: color.outlineVariant.withValues(alpha:0.5)),
                 ),
                 alignment: Alignment.center,
                 child: Text('Map preview', style: text.bodyMedium),
@@ -130,7 +130,7 @@ class _PointTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.outlineVariant.withOpacity(0.35)),
+        border: Border.all(color: color.outlineVariant.withValues(alpha:0.35)),
       ),
       child: Row(
         children: [
@@ -138,7 +138,7 @@ class _PointTile extends StatelessWidget {
           Container(
             width: 44, height: 44,
             decoration: BoxDecoration(
-              color: color.primary.withOpacity(0.12),
+              color: color.primary.withValues(alpha:0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.location_on, color: color.primary),
@@ -151,7 +151,7 @@ class _PointTile extends StatelessWidget {
               children: [
                 Text(point.name, style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
-                Text('${point.district} • ${point.schedule}', style: text.bodySmall?.copyWith(color: color.onSurface.withOpacity(0.7))),
+                Text('${point.district} • ${point.schedule}', style: text.bodySmall?.copyWith(color: color.onSurface.withValues(alpha:0.7))),
                 const SizedBox(height: 4),
                 Wrap(
                   spacing: 6, runSpacing: -4,
@@ -181,7 +181,7 @@ class _PointTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isActive ? Colors.green.withOpacity(0.15) : color.surfaceVariant,
+        color: isActive ? Colors.green.withValues(alpha:0.15) : color.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(isActive ? 'Activo' : 'Libre',
@@ -197,7 +197,7 @@ class _PointTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.secondaryContainer.withOpacity(0.35),
+        color: color.secondaryContainer.withValues(alpha:0.35),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),

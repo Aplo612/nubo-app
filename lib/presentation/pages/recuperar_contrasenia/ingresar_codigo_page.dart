@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 import 'package:nubo/services/password_reset_rtdb_service.dart';
 import 'reset_password_page.dart';
 
@@ -30,19 +31,18 @@ class _IngresarCodigoPageState extends State<IngresarCodigoPage> {
           .validateOtp(widget.email, _codeCtrl.text);
 
       if (!ok) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Código inválido o vencido')),
-        );
+        if (!context.mounted) return;
+        SnackbarUtil.showSnack(context, message: 'Código inválido o vencido');
         return;
       }
 
       // Marca como usado para que no se reutilice
       await PasswordResetRTDBService.consumeOtp(widget.email);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
       // Aquí normalmente llamarías a tu backend (Admin SDK) para cambiar la contraseña.
       // Por ahora solo pasamos a la pantalla para ingresar la nueva contraseña.
+      //TODO - buscar alternativa en gorouter
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => ResetPasswordPage(email: widget.email),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String email;
@@ -61,10 +63,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     // Aquí enviarías al backend el cambio real de contraseña.
     // Por ahora, solo mostramos éxito y retrocedemos.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Contraseña actualizada correctamente.')),
-    );
-    Navigator.of(context).popUntil((route) => route.isFirst); // vuelve al inicio del flujo
+    SnackbarUtil.showSnack(context, message: 'Contraseña actualizada correctamente.');
+    
+    NavigationHelper.safePushReplacement(context, "/"); // vuelve al inicio del flujo
   }
 
   Widget _buildRequisitos() {

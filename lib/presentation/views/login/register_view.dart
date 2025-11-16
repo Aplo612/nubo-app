@@ -112,6 +112,8 @@ class _RegisterFormState extends State<RegisterForm> {
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
                                 await Future.delayed(const Duration(milliseconds: 80));
+                                if (!context.mounted) return;
+                                // ignore: use_build_context_synchronously
                                 NavigationHelper.safePop(context);
                               },
                             ),
@@ -221,7 +223,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 fontSize: 14,
                                 height: 1.25,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.black.withOpacity(0.78),
+                                color: Colors.black.withValues(alpha: 0.78),
                                 letterSpacing: .1,
                               ),
                               children: [
@@ -400,6 +402,7 @@ class _RegisterFormState extends State<RegisterForm> {
       await AuthService.createUserWithEmailAndPassword(
         email: email,
         password: pass,
+        displayName:  user,
       );
 
       // 2) Actualizar perfil
@@ -417,7 +420,7 @@ class _RegisterFormState extends State<RegisterForm> {
         backgroundColor: Colors.green.shade600,
         duration: const Duration(seconds: 10),
       );
-
+      if (!context.mounted) return;
       // Navega “seguro” (pop si puede, o tu fallback)
       NavigationHelper.safePop(context);
     } catch (e) {

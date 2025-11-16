@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nubo/config/config.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nubo/config/config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nubo/presentation/utils/generic_button/pill_button.dart';
 import 'package:nubo/presentation/utils/generic_button/social_button.dart';
-import 'package:nubo/presentation/views/home/rankings/rankings_view.dart';
 
 class LoginButtons extends StatelessWidget {
   const LoginButtons({super.key});

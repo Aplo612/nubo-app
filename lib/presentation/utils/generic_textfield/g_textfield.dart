@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nubo/config/config.dart';
 
 class UserField extends StatefulWidget {
   const UserField({

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../config/constants/enviroments.dart';
 
 /// Controlador para manejar el estado de visibilidad (obscure) y foco desde fuera.
 class PasswordFieldController extends ChangeNotifier {
