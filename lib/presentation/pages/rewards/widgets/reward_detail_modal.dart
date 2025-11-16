@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nubo/config/constants/enviroments.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 
 class RewardDetailModal extends StatelessWidget {
   final String title;
@@ -221,7 +222,7 @@ class RewardDetailModal extends StatelessWidget {
                 // Botón de reclamar
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    NavigationHelper.safePop(context);
                     onClaim();
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class MissionsPage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _MissionsPageState extends State<MissionsPage> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () => NavigationHelper.safePop(context)
         ),
       ),
       body: ListView(
@@ -120,12 +122,13 @@ class _MissionsPageState extends State<MissionsPage> {
       builder: (sheetCtx) => _StepsSheet(
         mission: m,
         primary: _PillButton.green('Aceptar', onPressed: () {
+           //TODO - buscar alternativa en gorouter
           Navigator.of(sheetCtx).pop(true);
         }),
       ),
     );
 
-    if (accepted == true) {
+    if (accepted == true && context.mounted) {
       final cont = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
@@ -177,13 +180,11 @@ class _MissionsPageState extends State<MissionsPage> {
           builder: (sheetCtx) => _StepsSheet(
             mission: m,
             primary: _PillButton.green('Generar QR', onPressed: () {
-              Navigator.of(sheetCtx).pop(); // cerrar Fig.1
+              NavigationHelper.safePop(context); // cerrar Fig.1
               _startGenerate(index);
             }),
             secondary: _PillButton.blue('Ver en Mapa', onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Próximamente')),
-              );
+              SnackbarUtil.showSnack(context, message: 'Próximamente');
             }),
           ),
         );
@@ -259,7 +260,7 @@ class _MissionsPageState extends State<MissionsPage> {
           builder: (sheetCtx) => _DoneSheet(
             mission: m,
             onRedeem: () {
-              Navigator.of(sheetCtx).pop();
+              NavigationHelper.safePop(sheetCtx);
               setState(() {
                 missions[index].status = MissionStatus.completed;
               });
@@ -278,9 +279,7 @@ class _MissionsPageState extends State<MissionsPage> {
         m.qrStage == QrStage.nextSteps ||
         m.qrStage == QrStage.done ||
         m.status == MissionStatus.completed) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('El QR ya fue validado o canjeado.')),
-      );
+        SnackbarUtil.showSnack(context, message: 'El QR ya fue validado o canjeado.');
       _openStage(index);
       return;
     }
@@ -365,7 +364,7 @@ class _MissionCard extends StatelessWidget {
                             fontSize: 18, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 2),
                     Text(mission.subtitle,
-                        style: TextStyle(color: Colors.black.withOpacity(.7))),
+                        style: TextStyle(color: Colors.black.withValues(alpha: .7))),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -470,7 +469,7 @@ class _SpecialRewardCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(subtitle,
                           style:
-                              TextStyle(color: Colors.black.withOpacity(.72))),
+                              TextStyle(color: Colors.black.withValues(alpha:.72))),
                       const SizedBox(height: 8),
                       Row(
                         children: [
@@ -523,7 +522,7 @@ class _Chip extends StatelessWidget {
         boxShadow: [
           if (!selected)
             BoxShadow(
-              color: Colors.black.withOpacity(.04),
+              color: Colors.black.withValues(alpha:.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -565,7 +564,7 @@ class _StepsSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SheetHeader(onClose: () => Navigator.pop(context)),
+          _SheetHeader(onClose: () => NavigationHelper.safePop(context)),
           const SizedBox(height: 4),
           Text(mission.title,
               style:
@@ -583,7 +582,7 @@ class _StepsSheet extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(mission.subtitle,
-                    style: TextStyle(color: Colors.black.withOpacity(.72))),
+                    style: TextStyle(color: Colors.black.withValues(alpha:.72))),
               ),
             ],
           ),
@@ -617,7 +616,7 @@ class _SimpleSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SheetHeader(onClose: () => Navigator.pop(context)),
+          _SheetHeader(onClose: () => NavigationHelper.safePop(context)),
           const SizedBox(height: 4),
           Text(mission.title,
               style:
@@ -635,7 +634,7 @@ class _SimpleSheet extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(mission.subtitle,
-                    style: TextStyle(color: Colors.black.withOpacity(.72))),
+                    style: TextStyle(color: Colors.black.withValues(alpha:.72))),
               ),
             ],
           ),
@@ -663,7 +662,7 @@ class _QrSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SheetHeader(onClose: () => Navigator.pop(context)),
+          _SheetHeader(onClose: () => NavigationHelper.safePop(context)),
           const SizedBox(height: 4),
           Text(mission.title,
               style:
@@ -699,7 +698,7 @@ class _DoneSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SheetHeader(onClose: () => Navigator.pop(context)),
+          _SheetHeader(onClose: () => NavigationHelper.safePop(context)),
           const SizedBox(height: 4),
           Text(mission.title,
               style:
@@ -748,7 +747,7 @@ class _ConfirmDialog extends StatelessWidget {
             Text(
               'Tu misión $missionTitle está dentro de tus misiones pendientes.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black.withOpacity(.85)),
+              style: TextStyle(color: Colors.black.withValues(alpha: 0.85)),
             ),
             const SizedBox(height: 18),
             FilledButton(
@@ -760,6 +759,7 @@ class _ConfirmDialog extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
+               //TODO - buscar alternativa en gorouter
               onPressed: () => Navigator.of(context).pop(true),
               child:
                   const Text('Continuar', style: TextStyle(fontWeight: FontWeight.w800)),
@@ -782,8 +782,8 @@ class _ModalScaffold extends StatelessWidget {
     return Stack(
       children: [
         GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(color: Colors.black.withOpacity(.5)),
+          onTap: () => NavigationHelper.safePop(context),
+          child: Container(color: Colors.black.withValues(alpha:.5)),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -795,7 +795,7 @@ class _ModalScaffold extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(.15),
+                  color: Colors.black.withValues(alpha:.15),
                   blurRadius: 18,
                   offset: const Offset(0, 8),
                 ),
@@ -849,7 +849,7 @@ class _PillButton extends StatelessWidget {
   final String text;
   final Color color;
   final VoidCallback onPressed;
-  const _PillButton(this.text, this.color, this.onPressed, {super.key});
+  const _PillButton(this.text, this.color, this.onPressed);
 
   factory _PillButton.green(String t, {required VoidCallback onPressed}) =>
       _PillButton(t, const Color(0xFF31B14F), onPressed);
@@ -881,7 +881,7 @@ BoxDecoration _card({Color? borderColor}) => BoxDecoration(
       border: Border.all(color: borderColor ?? Colors.transparent, width: 1.2),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(.06),
+          color: Colors.black.withValues(alpha:.06),
           blurRadius: 12,
           offset: const Offset(0, 6),
         ),

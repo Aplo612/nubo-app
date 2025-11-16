@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nubo/config/config.dart';
-import 'package:nubo/presentation/utils/generic_button/generic_button.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_passwordtextfield.dart';
 import 'package:nubo/presentation/utils/generic_textfield/g_textfield.dart';
 import 'package:nubo/services/auth_service.dart';
@@ -99,6 +97,8 @@ class _LoginFormState extends State<LoginForm> {
                                 onPressed: () async {
                                   FocusScope.of(context).unfocus();
                                   await Future.delayed(const Duration(milliseconds: 80));
+                                  if (!context.mounted) return;
+                                  // ignore: use_build_context_synchronously
                                   NavigationHelper.safePop(context);
                                 },
                               ),
@@ -320,7 +320,7 @@ class _LoginFormState extends State<LoginForm> {
       }
     }
   }
-
+/*
   // Método para mostrar diálogo de recuperación de contraseña
   void _showPasswordResetDialog() {
     final TextEditingController emailController = TextEditingController();
@@ -360,7 +360,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => NavigationHelper.safePop(context),
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
@@ -386,6 +386,7 @@ class _LoginFormState extends State<LoginForm> {
       },
     );
   }
+  */
   static Widget _cloud(double size, Color color) {
     return Container(
       width: size,

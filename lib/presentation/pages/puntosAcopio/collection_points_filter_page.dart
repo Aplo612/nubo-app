@@ -37,6 +37,7 @@ class _CollectionPointsFilterPageState extends State<CollectionPointsFilterPage>
 
   void _apply() {
     if (_formKey.currentState?.validate() ?? false) {
+       //TODO - buscar alternativa en gorouter
       Navigator.of(context).pop(
         _filter.copyWith(
           organization: _orgCtrl.text.trim().isEmpty ? null : _orgCtrl.text.trim(),
@@ -69,7 +70,7 @@ class _CollectionPointsFilterPageState extends State<CollectionPointsFilterPage>
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<MissionState>(
-                  value: _state,
+                  initialValue: _state,
                   decoration: const InputDecoration(labelText: 'Estado de la misión'),
                   items: const [
                     DropdownMenuItem(value: MissionState.activo, child: Text('Activo')),
@@ -79,7 +80,7 @@ class _CollectionPointsFilterPageState extends State<CollectionPointsFilterPage>
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<RewardType>(
-                  value: _rewardType,
+                  initialValue: _rewardType,
                   decoration: const InputDecoration(labelText: 'Tipo de recompensa'),
                   items: const [
                     DropdownMenuItem(value: RewardType.libre, child: Text('Libre')),

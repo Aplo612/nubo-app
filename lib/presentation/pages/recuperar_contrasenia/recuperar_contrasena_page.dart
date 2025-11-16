@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 import 'package:nubo/services/auth_service.dart';
 
 class RecuperarContrasenaPage extends StatefulWidget {
@@ -35,22 +37,17 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
     try {
       await AuthService.sendPasswordResetEmail(email);
 
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Si el correo existe, te enviamos un enlace para restablecer la contraseña.'),
-          duration: Duration(seconds: 4),
-        ),
+      if (!context.mounted) return;
+      SnackbarUtil.showSnack(context, message: 'Si el correo existe, te enviamos un enlace para restablecer la contraseña.',
+        duration: Duration(seconds: 4)
       );
-
       // Opcional: volver al login o mostrar pantalla "Revisa tu correo"
-      Navigator.of(context).maybePop();
+      if (!context.mounted) return;
+      NavigationHelper.safePop(context);
     } catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       // Muestra el mensaje amigable de _handleAuthException si aplica (user-not-found, etc.)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      SnackbarUtil.showSnack(context, message: e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -68,7 +65,7 @@ class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
         foregroundColor: Colors.black87,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () => NavigationHelper.safePop(context),
         ),
       ),
       body: SafeArea(

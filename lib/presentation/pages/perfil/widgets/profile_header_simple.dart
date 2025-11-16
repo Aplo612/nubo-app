@@ -56,6 +56,7 @@ class ProfileHeaderSimple extends StatelessWidget {
             backgroundImage: profile.user.avatar != null
                 ? NetworkImage(profile.user.avatar!)
                 : null,
+            backgroundColor: primaryLight,
             child: profile.user.avatar == null
                 ? Text(
                     profile.user.username.isNotEmpty
@@ -69,7 +70,6 @@ class ProfileHeaderSimple extends StatelessWidget {
                     ),
                   )
                 : null,
-            backgroundColor: primaryLight,
           ),
         ),
         const SizedBox(height: 16),

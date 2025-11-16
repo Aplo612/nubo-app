@@ -85,6 +85,7 @@ class AuthService {
 
     try {
       final List<String> methods =
+      //TODO - CAMBIAR FUNCION DEPRECADA
           await _auth.fetchSignInMethodsForEmail(normalized);
 
       debugPrint('🔎 fetchSignInMethodsForEmail("$normalized") -> $methods');

@@ -5,6 +5,7 @@ import 'package:nubo/presentation/pages/rewards/widgets/nubo_coin_balance.dart';
 import 'package:nubo/presentation/pages/rewards/widgets/flash_reward_section.dart';
 import 'package:nubo/presentation/pages/rewards/widgets/reward_category_filters.dart';
 import 'package:nubo/presentation/pages/rewards/widgets/reward_card.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 
 class RewardsPage extends StatefulWidget {
   static const String name = 'rewards_page';
@@ -46,9 +47,7 @@ class _RewardsPageState extends State<RewardsPage> {
                 cost: 30,
                 timerText: '26:02:45',
                 onClaim: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Recompensa flash reclamada exitosamente')),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Recompensa flash reclamada exitosamente');
                 },
               ),
               const SizedBox(height: 24),
@@ -86,9 +85,7 @@ class _RewardsPageState extends State<RewardsPage> {
                 discount: 75,
                 icon: Icons.inventory_2,
                 onClaim: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Recompensa reclamada exitosamente')),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Recompensa reclamada exitosamente');
                 },
               ),
               RewardCard(
@@ -98,9 +95,7 @@ class _RewardsPageState extends State<RewardsPage> {
                 discount: 20,
                 icon: Icons.inventory_2,
                 onClaim: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Recompensa reclamada exitosamente')),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Recompensa reclamada exitosamente');  
                 },
               ),
               RewardCard(
@@ -111,9 +106,7 @@ class _RewardsPageState extends State<RewardsPage> {
                 discount: 30,
                 icon: Icons.local_movies,
                 onClaim: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Recompensa reclamada exitosamente')),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Recompensa reclamada exitosamente');
                 },
               ),
               RewardCard(
@@ -124,9 +117,7 @@ class _RewardsPageState extends State<RewardsPage> {
                 discount: 15,
                 icon: Icons.shopping_bag,
                 onClaim: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Recompensa reclamada exitosamente')),
-                  );
+                  SnackbarUtil.showSnack(context, message: 'Recompensa reclamada exitosamente');
                 },
               ),
               const SizedBox(height: 24),

@@ -42,7 +42,7 @@ class CollectionPointsSection extends StatelessWidget {
             // Subtítulo sutil
             Text(
               'Encuentra los más cercanos a tu ubicación',
-              style: text.bodySmall?.copyWith(color: color.onSurface.withOpacity(0.65)),
+              style: text.bodySmall?.copyWith(color: color.onSurface.withValues(alpha:0.65)),
             ),
             const SizedBox(height: 12),
 
@@ -120,7 +120,7 @@ class _PointCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.outlineVariant.withOpacity(0.4)),
+        border: Border.all(color: color.outlineVariant.withValues(alpha:0.4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,7 @@ class _PointCard extends StatelessWidget {
                   schedule,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: text.bodySmall?.copyWith(color: color.onSurface.withOpacity(0.7)),
+                  style: text.bodySmall?.copyWith(color: color.onSurface.withValues(alpha:0.7)),
                 ),
               ),
               const SizedBox(width: 8),
@@ -191,9 +191,9 @@ class _ChipSmall extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.primary.withOpacity(0.10),
+        color: color.primary.withValues(alpha:0.10),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.primary.withOpacity(0.25)),
+        border: Border.all(color: color.primary.withValues(alpha:0.25)),
       ),
       child: Text(
         label,
@@ -216,14 +216,14 @@ class _ChipTiny extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.secondaryContainer.withOpacity(0.35),
+        color: color.secondaryContainer.withValues(alpha:0.35),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: color.onSecondaryContainer.withOpacity(0.9),
+              color: color.onSecondaryContainer.withValues(alpha:0.9),
             ),
       ),
     );

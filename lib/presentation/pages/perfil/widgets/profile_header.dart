@@ -91,6 +91,7 @@ class ProfileHeader extends StatelessWidget {
                           backgroundImage: profile.user.avatar != null
                               ? NetworkImage(profile.user.avatar!)
                               : null,
+                          backgroundColor: NuboColors.sky400,
                           child: profile.user.avatar == null
                               ? Text(
                                   profile.user.username.isNotEmpty
@@ -104,7 +105,6 @@ class ProfileHeader extends StatelessWidget {
                                   ),
                                 )
                               : null,
-                          backgroundColor: NuboColors.sky400,
                         ),
                       ),
                       Positioned(

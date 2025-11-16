@@ -20,6 +20,7 @@ class PasswordResetRTDBService {
 
   /// Verifica si el correo existe en Firebase Auth (gratis)
   static Future<bool> emailExists(String email) async {
+    //TODO - CAMBIAR FUNCION DEPRECADA
     final methods = await _auth.fetchSignInMethodsForEmail(email.trim());
     return methods.isNotEmpty;
   }

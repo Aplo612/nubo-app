@@ -112,6 +112,8 @@ class _RegisterFormState extends State<RegisterForm> {
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
                                 await Future.delayed(const Duration(milliseconds: 80));
+                                if (!context.mounted) return;
+                                // ignore: use_build_context_synchronously
                                 NavigationHelper.safePop(context);
                               },
                             ),
@@ -418,7 +420,7 @@ class _RegisterFormState extends State<RegisterForm> {
         backgroundColor: Colors.green.shade600,
         duration: const Duration(seconds: 10),
       );
-
+      if (!context.mounted) return;
       // Navega “seguro” (pop si puede, o tu fallback)
       NavigationHelper.safePop(context);
     } catch (e) {

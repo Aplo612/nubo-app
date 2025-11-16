@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nubo/models/profile.dart';
 import 'package:nubo/config/constants/enviroments.dart';
 
 class ActionButtons extends StatelessWidget {

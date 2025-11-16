@@ -15,7 +15,7 @@ class RecentActivity extends StatelessWidget {
       enableShadow: false,
       padding: const EdgeInsets.all(16),
       children: [
-        ...display.map((a) => _ActivityTile(activity: a)).toList(),
+        ...display.map((a) => _ActivityTile(activity: a)),
       ],
     );
   }

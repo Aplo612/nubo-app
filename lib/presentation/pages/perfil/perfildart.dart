@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nubo/models/profile.dart';
+import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
 import 'package:nubo/services/profile_repository.dart';
 import 'package:nubo/services/profile_service.dart';
 import 'package:nubo/services/auth_service.dart';
@@ -105,9 +106,7 @@ class ProfilePage extends StatelessWidget {
                           }
                         } catch (e) {
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('No se pudo cerrar sesión: $e')),
-                            );
+                            SnackbarUtil.showSnack(context, message: 'No se pudo cerrar sesión: $e');
                           }
                         }
                       },
