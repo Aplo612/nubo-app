@@ -221,7 +221,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 fontSize: 14,
                                 height: 1.25,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.black.withOpacity(0.78),
+                                color: Colors.black.withValues(alpha: 0.78),
                                 letterSpacing: .1,
                               ),
                               children: [

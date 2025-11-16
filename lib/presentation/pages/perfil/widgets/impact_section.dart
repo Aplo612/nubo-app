@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nubo/models/profile.dart';
 import 'package:nubo/config/constants/enviroments.dart';
+import 'package:nubo/presentation/utils/card_custom/card_custom.dart';
 
 class ImpactSection extends StatelessWidget {
   final Stats stats;
@@ -8,39 +9,19 @@ class ImpactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+    return CardCustom(
+      title: 'Tu impacto ambiental',
+      enableShadow: false,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          colors: [NuboColors.green400.withOpacity(0.2), NuboColors.green500.withOpacity(0.25)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+      children: [
+        Row(
+          children: [
+            Expanded(child: _ImpactTile(title: 'kg reciclados', value: '${stats.kgRecycled} kg')),
+            const SizedBox(width: 12),
+            Expanded(child: _ImpactTile(title: 'botellas salvadas', value: '${stats.bottlesSaved}')),
+          ],
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Tu Impacto Ambiental',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF22324D),
-              fontFamily: robotoMedium,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _ImpactTile(title: 'Kg reciclados', value: '${stats.kgRecycled} kg')),
-              const SizedBox(width: 12),
-              Expanded(child: _ImpactTile(title: 'Botellas salvadas', value: '${stats.bottlesSaved}')),
-            ],
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
@@ -55,31 +36,28 @@ class _ImpactTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: gray50,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 3)),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF0F233D),
+              color: Colors.black87,
               fontFamily: robotoBold,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: Color(0xFF8A97A8),
-              fontWeight: FontWeight.w600,
+              color: gray600,
+              fontWeight: FontWeight.w500,
               fontFamily: robotoMedium,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nubo/config/constants/enviroments.dart';
 
 class SettingsSection extends StatelessWidget {
   final VoidCallback onLogout;
@@ -7,11 +8,19 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Configuración', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          Text(
+            'Configuración',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: Colors.black87,
+              fontFamily: robotoMedium,
+            ),
+          ),
           const SizedBox(height: 8),
           _SettingTile(icon: '🔔', title: 'Notificaciones', onTap: () {}),
           _SettingTile(icon: '🛡️', title: 'Privacidad', onTap: () {}),
@@ -41,16 +50,22 @@ class _SettingTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          boxShadow: const [
-            BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 3)),
-          ],
         ),
         child: Row(
           children: [
             Text(icon, style: const TextStyle(fontSize: 18)),
             const SizedBox(width: 12),
-            Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
-            const Icon(Icons.chevron_right, color: Colors.black45),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontFamily: robotoBold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, color: gray400),
           ],
         ),
       ),
@@ -70,16 +85,22 @@ class _LogoutButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFE5E5),
+          color: errorLight,
           borderRadius: BorderRadius.circular(14),
-          boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 3))],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.logout, color: Colors.redAccent),
-            SizedBox(width: 8),
-            Text('Cerrar Sesión', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w800)),
+          children: [
+            Icon(Icons.logout, color: errorColor),
+            const SizedBox(width: 8),
+            Text(
+              'Cerrar Sesión',
+              style: TextStyle(
+                color: errorColor,
+                fontWeight: FontWeight.w800,
+                fontFamily: robotoBold,
+              ),
+            ),
           ],
         ),
       ),

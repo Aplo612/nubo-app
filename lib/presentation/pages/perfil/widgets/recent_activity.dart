@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nubo/models/profile.dart';
+import 'package:nubo/config/constants/enviroments.dart';
+import 'package:nubo/presentation/utils/card_custom/card_custom.dart';
 
 class RecentActivity extends StatelessWidget {
   final List<Activity> activities;
@@ -7,17 +9,14 @@ class RecentActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final display = activities.take(5).toList();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Actividad Reciente', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 8),
-          ...display.map((a) => _ActivityTile(activity: a)).toList(),
-        ],
-      ),
+    final display = activities.take(3).toList();
+    return CardCustom(
+      title: 'Actividad Reciente',
+      enableShadow: false,
+      padding: const EdgeInsets.all(16),
+      children: [
+        ...display.map((a) => _ActivityTile(activity: a)).toList(),
+      ],
     );
   }
 }
@@ -34,9 +33,6 @@ class _ActivityTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 3)),
-        ],
       ),
       child: Row(
         children: [
@@ -44,27 +40,48 @@ class _ActivityTile extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: NuboColors.blue100,
+              color: primaryLight,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.recycling, color: NuboColors.blue500, size: 20),
+            child: Icon(Icons.recycling, color: primary, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(activity.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text(
+                  activity.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: robotoBold,
+                    color: Colors.black87,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(_dateString(activity.date), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                Text(
+                  _dateString(activity.date),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: gray400,
+                    fontFamily: robotoRegular,
+                  ),
+                ),
               ],
             ),
           ),
           Row(
             children: [
-              const Icon(Icons.monetization_on, color: NuboColors.amber400, size: 18),
+              const Icon(Icons.monetization_on, color: warningActive, size: 18),
               const SizedBox(width: 4),
-              Text('+${activity.points}', style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text(
+                '+${activity.points}',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontFamily: robotoBold,
+                  color: warningActive,
+                ),
+              ),
             ],
           )
         ],
