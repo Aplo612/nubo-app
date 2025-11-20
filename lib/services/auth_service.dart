@@ -59,7 +59,8 @@ class AuthService {
         'wallet': {'coins': 30, 'updatedAt': DateTime.now()},
         'currentStreak': 0,     
         'maxStreak': 0,          
-        'lastMissionDate': null, 
+        'lastMissionDate': null,
+        'status': 'active',
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
