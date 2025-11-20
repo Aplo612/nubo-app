@@ -59,7 +59,8 @@ class AuthService {
         'wallet': {'coins': 30, 'updatedAt': DateTime.now()},
         'currentStreak': 0,     
         'maxStreak': 0,          
-        'lastMissionDate': null, 
+        'lastMissionDate': null,
+        'status': 'active',
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -202,14 +203,22 @@ Future<void> seedFakeMissionDaysAndState(String uid) async {
   final batch = db.batch();
   for (final d in dates) {
     final dayId = DateFormat('yyyy-MM-dd').format(d.toUtc());
-    final ref = db
+    final dayRef = db
         .collection('users').doc(uid)
-        .collection('mission_days').doc(dayId)
+        .collection('mission_days').doc(dayId);
+
+    batch.set(dayRef, {
+      'dayId'    : dayId,
+      'hasMissions': true,
+    }, SetOptions(merge: true));
+
+    final missionRef = dayRef
         .collection('missions').doc(missionId);
 
-    batch.set(ref, {
+    batch.set(missionRef, {
       'count'          : FieldValue.increment(1),
       'lastCompletedAt': Timestamp.fromDate(d),
+      'missionId'      : missionId,
     }, SetOptions(merge: true));
   }
 
