@@ -57,6 +57,9 @@ class AuthService {
         'gender': null,
         'location': {'department': null, 'province': null, 'district': null},
         'wallet': {'coins': 30, 'updatedAt': DateTime.now()},
+        'currentStreak': 0,     
+        'maxStreak': 0,          
+        'lastMissionDate': null, 
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
