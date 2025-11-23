@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
@@ -340,13 +339,55 @@ class _MissionsPageState extends State<MissionsPage> {
         break;
 
       case QrStage.qrShown:
+        final code = m.qrPayload;
+        if (code == null) {
+          // No hay código QR: volver al estado listo para iniciar
+          setState(() => m.qrStage = QrStage.readyToStart);
+          return;
+        }
+
         await showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (sheetCtx) => _QrSheet(titleExtra: null, mission: m),
+          builder: (sheetCtx) {
+            return StreamBuilder<Map<String, dynamic>?>(
+              stream: _missionController.watchQrToken(code),
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                final tokenStatus =
+                    (data?['status'] ?? 'pending_validation') as String;
+
+                // Si el backend/agent cambió el token a "validated"
+                if (tokenStatus == 'validated') {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!mounted) return;
+                    setState(() {
+                      m.qrStage = QrStage.validated;
+                    });
+                    // Cerrar este sheet si sigue abierto
+                    if (Navigator.of(sheetCtx).canPop()) {
+                      Navigator.of(sheetCtx).pop();
+                    }
+                    // Abrir la siguiente etapa (QR Validado)
+                    _openStage(m);
+                  });
+                }
+
+                final titleExtra =
+                    tokenStatus == 'validated' ? 'QR Validado' : null;
+
+                return _QrSheet(
+                  mission: m,
+                  titleExtra: titleExtra,
+                  validated: tokenStatus == 'validated',
+                );
+              },
+            );
+          },
         );
         break;
+
 
       case QrStage.validated:
         await showModalBottomSheet<void>(
@@ -405,7 +446,6 @@ class _MissionsPageState extends State<MissionsPage> {
     }
   }
 
-  // --------- Simulaciones de transición ----------
   // --------- Generación real de QR (sin simulación automática) ----------
   Future<void> _startGenerate(Mission mission) async {
     final m = mission;

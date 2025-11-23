@@ -1,4 +1,3 @@
-// mision_controller.dart
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubo/services/auth_service.dart';
@@ -18,7 +17,8 @@ class MissionController {
   /// Cada item es un Map con:
   ///  id, status, progress, target, periodKey, lastCompletedAt,
   ///  title, subtitle, coinsReward, active, frecuency, type, scope,
-  ///  qrCode, qrStatus (si existen en missions_state)
+  ///  qrCode, qrStatus, qrCreatedAt
+  
   Stream<List<Map<String, dynamic>>> availableMissionsStream() {
     final uid = _uid;
     if (uid == null) {
@@ -50,7 +50,7 @@ class MissionController {
           final instructions =
               (missionData['instructions'] as Map<String, dynamic>?) ?? {};
 
-          // Título y descripción: primero raíz, luego instructions como fallback
+          // Título y descripción con fallback
           final title =
               (missionData['title'] ?? instructions['title'] ?? '') as String;
 
@@ -171,10 +171,21 @@ class MissionController {
     return code;
   }
 
+  /// Stream para escuchar el token y reaccionar cuando el agente lo valide.
+  ///
+  /// Se usa en el frontend al mostrar el QR (QrStage.qrShown).
+  Stream<Map<String, dynamic>?> watchQrToken(String code) {
+    return _db
+        .collection('mission_tokens')
+        .doc(code)
+        .snapshots()
+        .map((snap) => snap.data());
+  }
+
   /// Genera un token corto tipo código humano-legible (para QR).
   String _generateShortToken({int length = 6}) {
-    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // sin 0/O 1/I para evitar confusión
-    final rnd = Random.secure();
+    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // sin 0/O 1/I
+    final rnd = Random();
     return List.generate(length, (_) => chars[rnd.nextInt(chars.length)]).join();
   }
 }
