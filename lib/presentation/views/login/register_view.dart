@@ -50,31 +50,16 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-        // === Degradado superior ===
-        Positioned(
-        top: 0, left: 0, right: 0,
-        child: Container(
-          height: 70,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFBFE6FF), Colors.white],
+       // === Nubes decorativas (no interactúan) ===
+          IgnorePointer(
+            child: Stack(
+              children: [
+                Positioned(left: -170, bottom: -240, child: _cloud(340, const Color(0xff6ecaf4))),
+                Positioned(left: 40, right: 40, bottom: -210, child: _cloud(280, const Color(0xffb4e2ff))),
+                Positioned(right: -170, bottom: -240, child: _cloud(340, const Color(0xbb6ecaf4))),
+              ],
             ),
           ),
-        ),
-      ),
-
-      // === Nubes decorativas (no interactúan) ===
-      IgnorePointer(
-        child: Stack(
-          children: [
-            Positioned(left: -170, bottom: -240, child: _cloud(340, const Color(0xff6ecaf4))),
-            Positioned(left: 40, right: 40, bottom: -210, child: _cloud(280, const Color(0xffb4e2ff))),
-            Positioned(right: -170, bottom: -240, child: _cloud(340, const Color(0xbb6ecaf4))),
-          ],
-        ),
-      ),
 
       // === Contenido con scroll y centrado adaptativo (igual que Login) ===
       LayoutBuilder(

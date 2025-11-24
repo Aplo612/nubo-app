@@ -73,6 +73,18 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
+      path: '/agent-val',
+      name: AgentValidateMissionPage.name,
+      builder: (_, __) => const AgentValidateMissionPage(),
+    ),
+
+    GoRoute(
+      path: '/validator',
+      name: ValidatorPage.name,
+      builder: (_, __) => const ValidatorPage(),
+    ),
+
+    GoRoute(
       path: '/404',
       name: NotFoundPage.name,
       builder: (context, state) => const NotFoundPage(),
