@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nubo/presentation/utils/navegation_router_utils/safe_navegation.dart';
 import 'package:nubo/presentation/utils/snackbar/snackbar.dart';
@@ -44,6 +45,35 @@ class _MissionsPageState extends State<MissionsPage> {
 
   /// Estado local de misiones por id, para conservar qrStage, etc.
   final Map<String, Mission> _missionsById = {};
+
+  StreamSubscription? _rewardSub;  // 👈 listener de recompensas
+
+  @override
+  void initState() {
+    super.initState();
+    _rewardSub = _missionController.listenAndRewardCompletedMissions(
+      onFirstRewarded: (missionId) {
+        final mission = _missionsById[missionId];
+        if (mission == null) return;
+        if (!mounted) return;
+
+        setState(() {
+          mission.status = MissionStatus.completed;
+          mission.qrStage = QrStage.done;
+        });
+
+        // Abrir la UI de "Misión completada"
+        _openStage(mission);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // Cancela el listener al salir de la pantalla
+    _rewardSub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -434,11 +464,10 @@ class _MissionsPageState extends State<MissionsPage> {
           builder: (sheetCtx) => _DoneSheet(
             mission: m,
             onRedeem: () {
+              // Aquí solo cerramos el modal.
+              // El status "completed" lo pone el agente en missions_state
+              // y la recompensa la otorga el listener del controller.
               NavigationHelper.safePop(sheetCtx);
-              setState(() {
-                mission.status = MissionStatus.completed;
-              });
-              // TODO: opcional -> actualizar missions_state.{status = 'completed'}
             },
           ),
         );
@@ -911,7 +940,7 @@ class _DoneSheet extends StatelessWidget {
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 12),
-          _PillButton.orange('Canjear', onPressed: onRedeem),
+          _PillButton.orange('Aceptar', onPressed: onRedeem),
         ],
       ),
     );
