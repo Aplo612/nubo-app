@@ -17,21 +17,6 @@ class LoginButtons extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Degradado superior
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              height: 70,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFFBFE6FF), Colors.white],
-                ),
-              ),
-            ),
-          ),
-
           // “Nubes” inferiores (3 círculos)
           // izquierda
           Positioned(

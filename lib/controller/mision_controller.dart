@@ -46,7 +46,7 @@ class MissionController {
           if (!missionSnap.exists) continue;
 
           final missionData =
-              missionSnap.data() as Map<String, dynamic>? ?? {};
+              missionSnap.data() ?? {};
           final instructions =
               (missionData['instructions'] as Map<String, dynamic>?) ?? {};
 

@@ -119,3 +119,5 @@ const leaderboardSvg = 'assets/icons-svg/leaderboard.svg';
 
 const recycleGreen = 'assets/main-menu/recycle_green.png';
 const rewardsOrange = 'assets/main-menu/rewards.png';
+
+const nuboSinFondo = 'assets/logo/nubo_sin_fondo.png';

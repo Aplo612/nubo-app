@@ -12,3 +12,5 @@ export 'package:nubo/presentation/pages/puntosAcopio/collection_points_page.dart
 export 'package:nubo/presentation/pages/puntosAcopio/collection_points_filter_page.dart';
 export 'package:nubo/features/collection_points/data/collection_points_repo.dart';
 export 'package:nubo/features/collection_points/domain/collection_point.dart';
+export 'package:nubo/presentation/pages/validator/validator_page.dart';
+export 'package:nubo/presentation/pages/validator/agent_page.dart';
