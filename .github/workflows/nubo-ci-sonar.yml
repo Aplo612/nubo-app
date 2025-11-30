@@ -1,0 +1,44 @@
+name: Nubo CI with SonarCloud
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # recomendado por SonarCloud
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'  # o la versión que use Nubo
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=Aplo612_nubo-app
+            -Dsonar.organization=aplo612
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=lib
+            -Dsonar.exclusions=**/*.g.dart
+            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
