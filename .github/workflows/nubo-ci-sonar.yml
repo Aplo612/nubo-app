@@ -19,7 +19,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.5'  # o la versión que use Nubo
+          flutter-version: '3.35.5' 
 
       - name: Install dependencies
         run: flutter pub get
